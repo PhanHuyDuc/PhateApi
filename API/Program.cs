@@ -1,7 +1,11 @@
 using API.Middleware;
 using Application.Core;
+using Application.Interfaces;
 using Application.Products.Queries;
+using Application.Products.Validators;
 using Domain;
+using FluentValidation;
+using Infrastructure.Photos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -18,24 +22,28 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 
 
+builder.Services.AddCors();
 builder.Services.AddMediatR(x =>
 {
     x.RegisterServicesFromAssemblyContaining<GetProductList.Handler>();
     x.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
-
+builder.Services.AddScoped<IMultiImageService, ImageService>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-
-builder.Services.AddCors();
-
+builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
 
-builder.Services.AddIdentityApiEndpoints<User>()
+builder.Services.AddIdentityApiEndpoints<User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+})
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>();
 
+builder.Services.Configure<CloudinarySettings>(builder.Configuration
+    .GetSection("Cloudinary"));
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -47,7 +55,7 @@ app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapGroup("api").MapIdentityApi<User>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

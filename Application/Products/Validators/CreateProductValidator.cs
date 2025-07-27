@@ -13,6 +13,11 @@ namespace Application.Products.Validators
             RuleFor(x => x.ProductDto.Price).GreaterThan(0).WithMessage("Product price must be greater than zero.");
             RuleFor(x => x.ProductDto.Type).NotEmpty().WithMessage("Product type is required.");
             RuleFor(x => x.ProductDto.Brand).NotEmpty().WithMessage("Product brand is required.");
+            RuleFor(x => x.MultiImages)
+            .NotNull()
+            .WithMessage("At least one image is required.")
+            .Must(images => images != null && images.Any(file => file != null && file.Length > 0))
+            .WithMessage("At least one valid image file is required.");
         }
     }
 

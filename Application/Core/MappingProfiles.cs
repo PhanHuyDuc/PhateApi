@@ -11,9 +11,9 @@ namespace Application.Core
             CreateMap<Product, ProductDto>()
                 .ForMember(dest => dest.MultiImages, opt => opt.MapFrom(src => src.MultiImages));
             CreateMap<CreateProductDto, Product>()
-                .ForMember(dest => dest.MultiImages, opt => opt.MapFrom(src => src.MultiImages));
+                .ForMember(dest => dest.MultiImages, opt => opt.Ignore());
             CreateMap<UpdateProductDto, Product>()
-                .ForMember(dest => dest.MultiImages, opt => opt.MapFrom(src => src.MultiImages));
+                .ForMember(dest => dest.MultiImages, opt => opt.Ignore());
         }
     }
 }
