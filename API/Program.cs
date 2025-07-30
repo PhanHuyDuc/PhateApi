@@ -1,6 +1,7 @@
 using API.Middleware;
 using Application.Core;
 using Application.Interfaces;
+using Application.Menus.Validators;
 using Application.Products.Queries;
 using Application.Products.Validators;
 using Domain;
@@ -32,6 +33,7 @@ builder.Services.AddMediatR(x =>
 builder.Services.AddScoped<IMultiImageService, ImageService>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateMenuValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
 
@@ -55,7 +57,7 @@ app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapGroup("api").MapIdentityApi<User>();
+app.MapGroup("api").MapIdentityApi<User>(); //api/login
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

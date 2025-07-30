@@ -11,10 +11,13 @@ namespace Persistence
         public DbSet<MultiImage> MultiImages { get; set; }
         public DbSet<UserPhoto> UserPhotos { get; set; }
         public DbSet<User> UserAccounts { get; set; }
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<WebInfo> WebInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.Entity<Product>()
                 .HasMany(p => p.MultiImages)
                 .WithOne(mi => mi.Product)

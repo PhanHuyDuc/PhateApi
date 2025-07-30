@@ -1,6 +1,6 @@
-namespace Domain
+namespace Application.Menus.DTOs
 {
-    public class Menu
+    public class UpdateMenuDto
     {
         public int Id { get; set; }
         public required string Name { get; set; }
