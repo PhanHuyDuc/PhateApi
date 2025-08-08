@@ -32,7 +32,7 @@ namespace API.Controllers
             }
             return ValidationProblem();
         }
-
+        
         [HttpGet("user-info")]
         public async Task<ActionResult> GetUserInfo()
         {
@@ -42,13 +42,15 @@ namespace API.Controllers
 
             if (user == null) return Unauthorized();
 
+            var roles = await signInManager.UserManager.GetRolesAsync(user);
             return Ok(new
             {
                 user.DisplayName,
                 user.Email,
                 user.Id,
                 user.PictureUrl,
-                user.Bio
+                user.Bio,
+                Roles = roles
             });
         }
 

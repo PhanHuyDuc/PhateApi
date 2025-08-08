@@ -13,6 +13,7 @@ namespace Persistence
         public DbSet<User> UserAccounts { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<WebInfo> WebInfos { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -12,7 +12,7 @@ namespace Application.Products.Queries
     {
         public class Query : IRequest<Result<ProductDto>>
         {
-            public required int Id { get; set; }
+            public required string Slug { get; set; }
         }
         public class Handler(AppDbContext context, IMapper mapper) : IRequestHandler<Query, Result<ProductDto>>
         {
@@ -21,7 +21,7 @@ namespace Application.Products.Queries
                 var product = await context.Products
                     .Include(p => p.MultiImages)
                     .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+                    .FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
 
                 if (product == null) return Result<ProductDto>.Failure("Product not found", 404);
 

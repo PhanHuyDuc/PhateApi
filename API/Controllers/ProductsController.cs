@@ -18,10 +18,10 @@ namespace API.Controllers
             Response.AddPaginationHeader(result.Value?.Metadata!);
             return HandleResult(result);
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDto>> GetProduct(int id)
+        [HttpGet("{slug}")]
+        public async Task<ActionResult<ProductDto>> GetProduct(string slug)
         {
-            var result = await Mediator.Send(new GetProductDetails.Query { Id = id });
+            var result = await Mediator.Send(new GetProductDetails.Query { Slug = slug });
             return HandleResult(result);
         }
         [Authorize(Roles = "Admin,Manager")]

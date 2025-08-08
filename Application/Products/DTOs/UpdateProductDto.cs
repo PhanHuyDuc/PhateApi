@@ -13,7 +13,10 @@ namespace Application.Products.DTOs
         public required string Type { get; set; }
         public required string Brand { get; set; }
         public int QuantityInStock { get; set; }
-         public ICollection<MultiImage>? MultiImages { get; set; }
-        
+        public required string Slug { get; set; }
+        public string? Rating { get; set; }
+        public int NumReview { get; set; }
+        public ICollection<MultiImage>? MultiImages { get; set; }
+
     }
 }

@@ -1,6 +1,5 @@
 using Domain;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
@@ -48,8 +47,9 @@ namespace Persistence
                 await userManager.AddToRolesAsync(manager, ["Member", "Manager"]);
             }
 
-            if (context.Products.Any()) return;
-            var products = new List<Product>
+            if (!context.Products.Any())
+            {
+                var products = new List<Product>
             {
               new (){
 
@@ -61,6 +61,9 @@ namespace Persistence
                 Type = "Coffee",
                 Brand = "Daily Coffee",
                 QuantityInStock = 100,
+                Slug = "A-fantasy-coffee-featuring-flounders",
+                Rating = "5",
+                NumReview = 10,
                 MultiImages = new List<MultiImage>
                 {
                     new MultiImage
@@ -88,6 +91,9 @@ namespace Persistence
                 Type = "Soda",
                 Brand = "Daily Coffee",
                 QuantityInStock = 100,
+                Slug = "A-fantasy-coffee-featuring-flounders",
+                Rating = "4.5",
+                NumReview = 10,
                 MultiImages = new List<MultiImage>
                 {
                     new MultiImage
@@ -106,7 +112,55 @@ namespace Persistence
               }
             };
 
-            await context.Products.AddRangeAsync(products);
+                await context.Products.AddRangeAsync(products);
+            }
+
+            if (!context.Menus.Any())
+            {
+                var menus = new List<Menu>
+            {
+                new(){
+                    Name="Home",
+                    Url= "/",
+                    Order = 1,
+                    IsActive = true,
+                    Type = "Main",
+                    Level = 1
+                },
+                new(){
+                    Name="Contact",
+                    Url= "/contact",
+                    Order = 2,
+                    IsActive = true,
+                    Type = "Main",
+                    Level = 1
+                },
+                new(){
+                    Name="Products",
+                    Url= "/products",
+                    Order = 1,
+                    IsActive = true,
+                    Type = "Main",
+                    Level = 1
+                }
+            };
+                await context.Menus.AddRangeAsync(menus);
+            }
+
+            if (!context.WebInfos.Any())
+            {
+                var webInfo = new WebInfo
+                {
+                    Title = "Daily Coffee",
+                    MetaDescription = "A fantasy coffee shop featuring flounders.",
+                    Keywords = "Coffee, Flounder, Fantasy",
+                    PhoneNumber = "0813313333",
+                    Email = "phatefantasy@flounderfantasy.com",
+                    Url = "https://flounderfantasy.com",
+                };
+                await context.WebInfos.AddRangeAsync(webInfo);
+            }
+
             await context.SaveChangesAsync();
 
         }

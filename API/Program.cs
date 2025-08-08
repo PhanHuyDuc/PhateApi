@@ -1,4 +1,5 @@
 using API.Middleware;
+using Application.Contacts.validators;
 using Application.Core;
 using Application.Interfaces;
 using Application.Menus.Validators;
@@ -19,7 +20,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 
@@ -34,6 +35,7 @@ builder.Services.AddScoped<IMultiImageService, ImageService>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateMenuValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateContactValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
 
@@ -48,11 +50,10 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration
     .GetSection("Cloudinary"));
 var app = builder.Build();
 
-app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
     .AllowCredentials()
-    .WithOrigins("http://localhost:3000", "https://localhost:3000"));
+    .WithOrigins("http://localhost:3000", "http://localhost:5001"));
 
 
 app.UseAuthentication();

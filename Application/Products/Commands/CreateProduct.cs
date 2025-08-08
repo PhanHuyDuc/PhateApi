@@ -1,6 +1,7 @@
 using Application.Core;
 using Application.Interfaces;
 using Application.Products.DTOs;
+using Application.Products.Extensions;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -22,7 +23,7 @@ namespace Application.Products.Commands
             public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var product = mapper.Map<Product>(request.ProductDto);
-        
+
                 if (request.MultiImages != null && request.MultiImages.Count > 0)
                 {
                     bool isMainSet = true;
@@ -50,6 +51,8 @@ namespace Application.Products.Commands
                         isMainSet = false; // Only the first image will be set as main
                     }
                 }
+                // Generate slug for the product
+                product.Slug = request.ProductDto.Name.GenerateSlug(context.Products);
                 context.Products.Add(product);
 
                 var result = await context.SaveChangesAsync(cancellationToken) > 0;
