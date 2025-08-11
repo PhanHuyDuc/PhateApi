@@ -1,13 +1,8 @@
 "use server";
 
-import { Account } from "@/types";
-import { fetchWrapper } from "../fetchWrapper";
 import { auth } from "@/auth";
-
-export async function getUserInfo(): Promise<Account> {
-  const result = await fetchWrapper.get("/account/user-info");
-  return result;
-}
+import { fetchWrapper } from "../fetchWrapper";
+import { Account, RegisterInput } from "@/types";
 
 export async function getCurrentUser() {
   try {
@@ -20,4 +15,9 @@ export async function getCurrentUser() {
     console.log(error);
     return null;
   }
+}
+
+export async function register(user: RegisterInput): Promise<Account> {
+  const result = await fetchWrapper.post("/account/register", user);
+  return result as Account;
 }

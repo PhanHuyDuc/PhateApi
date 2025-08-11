@@ -4,16 +4,24 @@ export const APP_DESCRIPTION =
 
 export const SERVER_URL =
   process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5001/api";
-export const NEXTAUTH_URL =
-  process.env.NEXTAUTH_URL ||
+export const NEXTAUTH_URL = process.env.NEXTAUTH_URL || "http://localhost:3000";
+export const NEXTAUTH_URL_LOGIN =
+  process.env.NEXTAUTH_URL_LOGIN ||
   "http://localhost:5001/api/login?useCookies=true";
-export const NEXTAUTH_URL_INTERNAL =
-  process.env.NEXTAUTH_URL_INTERNAL ||
-  "http://localhost:5001/api/login?useCookies=true";
-
-export const COOKIE_NAME = process.env.COOKIE_NAME;
+export const NEXTAUTH_URL_GETCURRENTUSER =
+  process.env.NEXTAUTH_URL_GETCURRENTUSER ||
+  "http://localhost:5001/api/account/user-info";
 
 export const signInDefaultValues = {
   email: "",
   password: "",
 };
+
+export const signUpDefaultValues = {
+  email: "",
+  password: "",
+  displayName: "",
+  bio: "",
+  confirmPassword: "",
+};
+

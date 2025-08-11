@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { SignIn } from "@/lib/actions/user.actions";
 import { signInDefaultValues } from "@/lib/constants";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 
 export default function CredentialsSigninForm() {
@@ -15,10 +15,16 @@ export default function CredentialsSigninForm() {
     success: false,
     message: "",
   });
-  console.log(data);
-
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
+
+  // Redirect on successful sign-in
+  useEffect(() => {
+    if (data.success) {
+      router.push(callbackUrl);
+    }
+  }, [data.success, router, callbackUrl]);
 
   const SignInButton = () => {
     const { pending } = useFormStatus();

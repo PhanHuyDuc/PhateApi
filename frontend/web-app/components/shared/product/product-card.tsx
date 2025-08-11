@@ -14,7 +14,7 @@ const ProductCard = ({ product }: Props) => {
       : "https://pixabay.com/photos/coffee-cup-cookies-mug-coffee-cup-1869599/"; // Fallback image
   return (
     <Card className="w-full max-w-sm">
-      <CardHeader className="p-0 items-center">
+      <CardHeader className="p-0 items-center ">
         <Link href={`/products/${product.slug}`}>
           <Image
             src={mainImage}

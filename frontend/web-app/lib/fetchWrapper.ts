@@ -1,11 +1,11 @@
 import { SERVER_URL } from "./constants";
 
 const baseUrl = SERVER_URL;
+
 async function get(url: string) {
   const requestOptions = {
     method: "GET",
     headers: await getHeaders(),
-    credentials: "include" as const,
   };
   const response = await fetch(baseUrl + url, requestOptions);
   return handleResponse(response);
@@ -42,7 +42,7 @@ async function handleResponse(response: Response) {
 
 async function getHeaders(): Promise<Headers> {
   const headers = new Headers();
-  headers.set("Content-type", "application/json");
+  headers.set("Content-Type", "application/json");
   return headers;
 }
 

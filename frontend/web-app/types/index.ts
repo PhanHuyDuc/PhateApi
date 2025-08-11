@@ -36,3 +36,11 @@ export type Account = {
   bio: string;
   roles: string[];
 };
+
+export type RegisterInput = {
+  displayName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  bio: string;
+};
