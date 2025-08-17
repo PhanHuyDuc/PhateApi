@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getProductBySlug } from "@/lib/actions/product.actions";
 import { numberWithCommas } from "@/lib/numberWithCommas";
-import { MultiImage } from "@/types";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -54,7 +53,7 @@ export default async function ProductDetailsPage({ params }: Props) {
               </div>
               <div className="mb-2 flex justify-between">
                 <div>Status</div>
-                {product.quantityInStock > 0 ? (
+                {(product.quantityInStock ?? 0) > 0 ? (
                   <Badge variant={`outline`}>In Stock</Badge>
                 ) : (
                   <Badge variant={"destructive"}>Out of Stock</Badge>

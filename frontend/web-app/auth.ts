@@ -4,6 +4,7 @@ import {
   NEXTAUTH_URL_GETCURRENTUSER,
   NEXTAUTH_URL_LOGIN,
 } from "./lib/constants";
+import toast from "react-hot-toast";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -34,7 +35,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           // Extract Set-Cookie headers (array in Node.js fetch)
           const cookies = loginResponse.headers.getSetCookie() || [];
           const cookieHeader = cookies.join("; ");
-
           if (!loginResponse.ok) {
             throw new Error("Invalid email or password");
           }
@@ -55,7 +55,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           let userData;
           try {
             userData = JSON.parse(userText);
-            
           } catch (parseError) {
             console.error(
               "JSON parsing error:",
@@ -68,10 +67,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Validate required fields
           if (!userData.id || !userData.email) {
-            console.log(
-              "Invalid user data, missing required fields:",
-              userData
-            );
             return null;
           }
 
@@ -84,9 +79,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             bio: userData.bio,
             roles: userData.roles,
             displayName: userData.displayName,
+            cookies: cookieHeader,
           };
         } catch (error) {
-          console.error("Authorize error:", error);
+          toast.error("Authorize error:" + error);
           return null;
         }
       },
@@ -105,6 +101,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.bio = user.bio;
         token.roles = user.roles;
         token.displayName = user.displayName;
+        token.cookies = user.cookies;
       }
       return token;
     },
@@ -116,6 +113,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.bio = token.bio;
         session.user.roles = token.roles;
         session.user.displayName = token.displayName;
+        session.user.cookies = token.cookies;
       }
       return session;
     },

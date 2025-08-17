@@ -39,7 +39,7 @@ export default function ProductImages({ multiImage }: Props) {
               current === image.url && "border-orange-500"
             )}
           >
-            <Image src={image.url} alt="image" width={100} height={100} />
+            <Image src={image.url || ""} alt="image" width={100} height={100} />
           </div>
         ))}
       </div>

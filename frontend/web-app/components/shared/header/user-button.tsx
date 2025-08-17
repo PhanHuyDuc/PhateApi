@@ -11,8 +11,17 @@ import { SignOut } from "@/lib/actions/user.actions";
 import { UserIcon } from "lucide-react";
 import Link from "next/link";
 
+type UserInfo = {
+  displayName?: string;
+  email?: string;
+  roles: string[];
+};
+
 export default async function UserButton() {
-  const userInfo = await getCurrentUser();
+  const userInfo = (await getCurrentUser()) as UserInfo | null;
+
+  const admin = userInfo?.roles.includes("Admin");
+  const manager = userInfo?.roles.includes("Manager");
   if (!userInfo) {
     return (
       <Button asChild>
@@ -23,7 +32,7 @@ export default async function UserButton() {
     );
   }
 
-  const firstInitial = userInfo.name?.charAt(0).toUpperCase() ?? "U";
+  const firstInitial = userInfo.displayName?.charAt(0).toUpperCase() ?? "U";
   return (
     <div className="flex gap-2 items-center">
       <DropdownMenu>
@@ -48,6 +57,13 @@ export default async function UserButton() {
               </div>
             </div>
           </DropdownMenuLabel>
+          {(admin || manager) && (
+            <DropdownMenuItem>
+              <Link href={"/admin/overview"} className="w-full">
+                Admin
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem className="p-0 mb-1">
             <form action={SignOut} className="w-full">
               <Button

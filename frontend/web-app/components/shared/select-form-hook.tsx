@@ -1,16 +1,30 @@
 import { useController, UseControllerProps } from "react-hook-form";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Alert, AlertTitle } from "../ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 
+type Option = {
+  label: string;
+  value: string;
+};
+
 type Props = {
   label: string;
-  type?: string;
+  placeholder: string;
   showlabel?: boolean;
+  data: Option[];
 } & UseControllerProps;
-export default function InputForm(props: Props) {
+
+export default function SelectForm(props: Props) {
   const { field, fieldState } = useController({ ...props });
+
   return (
     <div className="mb-3 block w-full">
       {props.showlabel && (
@@ -18,16 +32,18 @@ export default function InputForm(props: Props) {
           <Label htmlFor={field.name}>{props.label}</Label>
         </div>
       )}
-      <Input
-        {...props}
-        {...field}
-        value={field.value || ""}
-        type={props.type || ""}
-        placeholder={props.label}
-        color={
-          fieldState?.error ? "failure" : !fieldState.isDirty ? "" : "success"
-        }
-      />
+      <Select onValueChange={field.onChange} value={field.value || ""}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder={props.placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {props.data.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       {fieldState.error && (
         <Alert variant={"destructive"}>
           <AlertCircleIcon />

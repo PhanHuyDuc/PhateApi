@@ -1,6 +1,6 @@
 "use server";
 
-import { formatError, signInSchema, signUpSchema } from "../validators";
+import { signInSchema, signUpSchema } from "../validators";
 import { signIn, signOut } from "@/auth";
 import { register } from "./authActions";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
@@ -70,9 +70,8 @@ export async function SignUp(prevState: unknown, formData: FormData) {
     return { success: true, message: "user registered successfully" };
   } catch (error) {
     if (isRedirectError(error)) {
-      console.log("is redirect here");
       throw error;
     }
-    return { success: false, message: formatError(error) };
+    return { success: false, message: error };
   }
 }

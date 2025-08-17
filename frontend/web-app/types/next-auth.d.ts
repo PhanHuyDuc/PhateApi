@@ -22,6 +22,7 @@ declare module "next-auth" {
     pictureUrl: string;
     bio: string;
     roles: string[];
+    cookies: string;
   }
 }
 
@@ -33,5 +34,6 @@ declare module "next-auth/jwt" {
     pictureUrl: string;
     bio: string;
     roles: string[];
+    cookies: string;
   }
 }

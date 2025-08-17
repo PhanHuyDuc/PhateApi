@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
   output: "standalone",
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "200mb", // or "unlimited"
+    },
+  },
 };
 
 export default nextConfig;

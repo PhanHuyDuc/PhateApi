@@ -1,15 +1,14 @@
 import { useController, UseControllerProps } from "react-hook-form";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { Alert, AlertTitle } from "../ui/alert";
 import { AlertCircleIcon } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 
 type Props = {
   label: string;
-  type?: string;
   showlabel?: boolean;
 } & UseControllerProps;
-export default function InputForm(props: Props) {
+export default function TextAreaForm(props: Props) {
   const { field, fieldState } = useController({ ...props });
   return (
     <div className="mb-3 block w-full">
@@ -18,11 +17,10 @@ export default function InputForm(props: Props) {
           <Label htmlFor={field.name}>{props.label}</Label>
         </div>
       )}
-      <Input
+      <Textarea
         {...props}
         {...field}
         value={field.value || ""}
-        type={props.type || ""}
         placeholder={props.label}
         color={
           fieldState?.error ? "failure" : !fieldState.isDirty ? "" : "success"

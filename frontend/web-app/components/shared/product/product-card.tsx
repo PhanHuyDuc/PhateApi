@@ -14,10 +14,10 @@ const ProductCard = ({ product }: Props) => {
       : "https://pixabay.com/photos/coffee-cup-cookies-mug-coffee-cup-1869599/"; // Fallback image
   return (
     <Card className="w-full max-w-sm">
-      <CardHeader className="p-0 items-center ">
+      <CardHeader className="p-0 place-content-center">
         <Link href={`/products/${product.slug}`}>
           <Image
-            src={mainImage}
+            src={mainImage || ""}
             alt={product.name}
             height={300}
             width={300}
@@ -32,7 +32,7 @@ const ProductCard = ({ product }: Props) => {
         </Link>
         <div className="flex-between gap-4">
           <p>{product.rating} Stars</p>
-          {product.quantityInStock > 0 ? (
+          {(product.quantityInStock ?? 0) > 0 ? (
             <p className="font-bold">{numberWithCommas(product.price)} VND</p>
           ) : (
             <p className="text-destructive">Out of Stock</p>

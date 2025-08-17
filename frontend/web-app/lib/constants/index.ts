@@ -25,3 +25,14 @@ export const signUpDefaultValues = {
   confirmPassword: "",
 };
 
+export const productDefaultValues = {
+  name: "",
+  description: "",
+  price: 0,
+  saleoff: "",
+  shortdescription: "",
+  type: "",
+  brand: "",
+  quantityinstock: "0",
+  multiImage: [],
+};
