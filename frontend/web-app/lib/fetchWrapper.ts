@@ -79,6 +79,7 @@ async function del(url: string) {
     headers: await getHeaders(),
   };
   const response = await fetch(baseUrl + url, requestOptions);
+
   return handleResponse(response);
 }
 
@@ -93,9 +94,11 @@ async function handleResponse(response: Response) {
   if (response.ok) {
     return data || response.statusText;
   } else {
+    console.error("API ERROR:", data);
     const error = {
       status: response.status,
       message: typeof data === "string" ? data : response.statusText,
+      details: data,
     };
     return { error };
   }
@@ -146,17 +149,19 @@ async function handlePaginatedResponse(response: Response) {
   }
 }
 
-interface SessionWithCookies {
+interface Session {
   cookies?: string;
 }
 
 async function getHeaders(): Promise<Headers> {
-  const session = (await getCurrentUser()) as SessionWithCookies;
+  const session = (await getCurrentUser()) as Session;
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
+
   if (session && session.cookies) {
     headers.set("Cookie", session.cookies);
   }
+
   return headers;
 }
 

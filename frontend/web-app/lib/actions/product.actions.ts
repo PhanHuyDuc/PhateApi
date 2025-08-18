@@ -28,13 +28,15 @@ export async function createProduct(data: FieldValues) {
         value.forEach((file: File) => {
           formData.append("multiImages", file);
         });
-      } else {
+      } else if (typeof value === "number" || typeof value === "boolean") {
+        formData.append(key, value.toString());
+      } else if (value !== null && value !== undefined) {
         formData.append(key, value as any);
       }
     });
 
     const result = await fetchWrapper.postFormData(`/products`, formData);
-    revalidatePath("/admin/products");
+
     return result;
   } catch (error) {
     return {
@@ -59,12 +61,11 @@ export async function updateProduct(data: FieldValues, id: string) {
     });
 
     const result = await fetchWrapper.putFormData(`/products/${id}`, formData);
-    revalidatePath("/admin/products");
     return result;
   } catch (error) {
     return {
       success: false,
-      message: "Create Product failed:" + error,
+      message: "Update Product failed:" + error,
     };
   }
 }
@@ -90,5 +91,18 @@ export async function getAdminProduct(
   } catch (error: any) {
     toast.error("Failed to get data " + error.message);
     throw error;
+  }
+}
+
+export async function deleteImageProduct(id: string) {
+  try {
+    await fetchWrapper.del(`/products/image/${id}`);
+    
+    return { success: true, message: "Deleted success" };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Delete error:" + error,
+    };
   }
 }

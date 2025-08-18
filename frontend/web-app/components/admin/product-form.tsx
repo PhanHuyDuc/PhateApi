@@ -31,7 +31,6 @@ export default function ProductForm({ product }: Props) {
   });
   useEffect(() => {
     if (product) {
-      // Use setTimeout to ensure the reset happens after component mount
       setTimeout(() => {
         const {
           name,
@@ -81,7 +80,6 @@ export default function ProductForm({ product }: Props) {
   }
 
   return (
-    // should I set multipart/form-data in form tag
     <form className=" space-y-8" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col md:flex-row gap-5">
         {/* Name */}
@@ -134,6 +132,7 @@ export default function ProductForm({ product }: Props) {
           name="shortDescription"
           control={control}
           showlabel={true}
+          rules={{ required: "ShortDesc is required" }}
         />
       </div>
       <div className="flex flex-col md:flex-row gap-5">
@@ -152,6 +151,7 @@ export default function ProductForm({ product }: Props) {
           name="saleOff"
           control={control}
           showlabel={true}
+          type="number"
         />
         {/* Quantity */}
         <InputForm
@@ -159,6 +159,7 @@ export default function ProductForm({ product }: Props) {
           name="quantityInStock"
           control={control}
           showlabel={true}
+          type="number"
         />
       </div>
       <div className="flex flex-col md:flex-row gap-5">
@@ -188,7 +189,7 @@ export default function ProductForm({ product }: Props) {
           />
         )}
       </div>
-      <div>
+      <div className="flex justify-between">
         <Button
           type="submit"
           className="bg-green-600 hover:bg-green-400"
@@ -197,6 +198,13 @@ export default function ProductForm({ product }: Props) {
         >
           {isSubmitting && <LoaderCircle className="animate-spin" />}
           {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
+        <Button
+          className="outline bg-gray-500 hover:bg-gray-700 cursor-pointer"
+          onClick={() => router.push("/admin/products")}
+          type="button"
+        >
+          Cancel
         </Button>
       </div>
     </form>
