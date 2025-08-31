@@ -66,5 +66,21 @@ namespace Infrastructure.Photos
 
             return uploadResults;
         }
+        public async Task<UploadResult?> UploadContentImage(IFormFile file)
+        {
+            if (file.Length <= 0) return null;
+
+            await using var stream = file.OpenReadStream();
+
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Folder = SD.Cloudinary_Content_Folder
+            };
+
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+            return uploadResult;
+        }
     }
 }

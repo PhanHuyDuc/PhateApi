@@ -14,6 +14,11 @@ namespace Persistence
         public DbSet<Menu> Menus { get; set; }
         public DbSet<WebInfo> WebInfos { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Banner> Banners { get; set; }
+        public DbSet<BannerCategory> BannerCategories { get; set; }
+        public DbSet<Artist> Artists { get; set; }
+        public DbSet<ContentImage> ContentImages { get; set; }
+        public DbSet<Content> Contents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

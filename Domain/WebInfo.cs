@@ -1,6 +1,6 @@
 namespace Domain
 {
-    public class WebInfo
+    public class WebInfo : Entity
     {
         public int Id { get; set; }
         public required string Title { get; set; }

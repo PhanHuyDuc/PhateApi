@@ -21,6 +21,8 @@ import qs from "query-string";
 import AppPagination from "@/components/shared/app-pagination";
 import Search from "@/components/shared/search";
 import ProductFilter from "@/components/shared/product/product-fiilter";
+import EmptyData from "@/components/shared/empty-data";
+import { usePathname } from "next/navigation";
 
 export default function AdminProductPage() {
   const [loading, setLoading] = useState(true);
@@ -46,6 +48,14 @@ export default function AdminProductPage() {
   const setData = useProductStore((state) => state.setData);
 
   const setParams = useParamsStore((state) => state.setParams);
+
+  const pathName = usePathname();
+
+  const reset = useParamsStore((state) => state.reset);
+
+  useEffect(() => {
+    reset();
+  }, [pathName, reset]);
 
   const onSuccess = () => {
     // Refresh data after successful deletion
@@ -87,59 +97,69 @@ export default function AdminProductPage() {
         <ProductFilter />
         <Search />
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-center">NUM</TableHead>
-            <TableHead className="text-center">NAME</TableHead>
-            <TableHead className="text-center">PRICE</TableHead>
-            <TableHead className="text-center">TYPE</TableHead>
-            <TableHead className="text-center">RATING</TableHead>
-            <TableHead className="text-center">MAIN IMAGE</TableHead>
-            <TableHead className="w-[100px]">ACTIONS</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.products.map((product, index) => (
-            <TableRow key={product.id}>
-              <TableCell className="text-center">
-                {/* Calculate correct row number based on current page */}
-                {(params.pageNumber - 1) * params.pageSize + index + 1}
-              </TableCell>
-              <TableCell>{product.name}</TableCell>
-              <TableCell className="text-center">
-                {numberWithCommas(product.price)}
-              </TableCell>
-              <TableCell>{product.type}</TableCell>
-              <TableCell className="text-center">{product.rating}</TableCell>
-              <TableCell className="place-items-center">
-                <Image
-                  src={product.multiImages.find((img) => img.isMain)?.url || ""}
-                  height={48}
-                  width={48}
-                  alt={product.slug || ""}
-                />
-              </TableCell>
-              <TableCell className="flex gap-1">
-                <Button asChild variant={"outline"} size={"sm"}>
-                  <Link href={`/admin/products/${product.slug}`}>Edit</Link>
-                </Button>
-                <DeleteDialog
-                  action={deleteProduct}
-                  id={product.id.toLocaleString()}
-                  onSuccess={onSuccess}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {/*Pagination*/}
-      <AppPagination
-        currentPage={params.pageNumber}
-        pageCount={data.pageCount}
-        pageChanged={setPageNumber}
-      />
+      {data.products && data.products.length > 0 ? (
+        <>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-center">NUM</TableHead>
+                <TableHead className="text-center">NAME</TableHead>
+                <TableHead className="text-center">PRICE</TableHead>
+                <TableHead className="text-center">TYPE</TableHead>
+                <TableHead className="text-center">RATING</TableHead>
+                <TableHead className="text-center">MAIN IMAGE</TableHead>
+                <TableHead className="w-[100px]">ACTIONS</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.products.map((product, index) => (
+                <TableRow key={product.id}>
+                  <TableCell className="text-center">
+                    {/* Calculate correct row number based on current page */}
+                    {(params.pageNumber - 1) * params.pageSize + index + 1}
+                  </TableCell>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell className="text-center">
+                    {numberWithCommas(product.price)}
+                  </TableCell>
+                  <TableCell>{product.type}</TableCell>
+                  <TableCell className="text-center">
+                    {product.rating}
+                  </TableCell>
+                  <TableCell className="place-items-center">
+                    <Image
+                      src={
+                        product.multiImages.find((img) => img.isMain)?.url || ""
+                      }
+                      height={48}
+                      width={48}
+                      alt={product.slug || ""}
+                    />
+                  </TableCell>
+                  <TableCell className="flex gap-1">
+                    <Button asChild variant={"outline"} size={"sm"}>
+                      <Link href={`/admin/products/${product.slug}`}>Edit</Link>
+                    </Button>
+                    <DeleteDialog
+                      action={deleteProduct}
+                      id={product.id.toLocaleString()}
+                      onSuccess={onSuccess}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          {/*Pagination*/}
+          <AppPagination
+            currentPage={params.pageNumber}
+            pageCount={data.pageCount}
+            pageChanged={setPageNumber}
+          />
+        </>
+      ) : (
+        <EmptyData showReset />
+      )}
     </div>
   );
 }

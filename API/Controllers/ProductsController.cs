@@ -3,6 +3,7 @@ using Application.Core;
 using Application.Products.Commands;
 using Application.Products.DTOs;
 using Application.Products.Queries;
+using Application.Utility;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace API.Controllers
             var result = await Mediator.Send(new GetProductDetails.Query { Slug = slug });
             return HandleResult(result);
         }
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = SD.Role_Admin_Manager)]
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct([FromForm] CreateProductDto productDto, [FromForm] IFormFileCollection? multiImages)
         {
@@ -35,7 +36,7 @@ namespace API.Controllers
             });
             return HandleResult(result);
         }
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = SD.Role_Admin_Manager)]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateProduct(int id, [FromForm] UpdateProductDto productDto, [FromForm] IFormFileCollection? multiImages)
         {
@@ -48,18 +49,26 @@ namespace API.Controllers
             });
             return HandleResult(result);
         }
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = SD.Role_Admin_Manager)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct(int id)
         {
             var result = await Mediator.Send(new DeleteProduct.Command { Id = id });
             return HandleResult(result);
         }
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = SD.Role_Admin_Manager)]
         [HttpDelete("image/{imagePublicId}")]
         public async Task<ActionResult> DeleteImageProduct(string imagePublicId)
         {
             var result = await Mediator.Send(new DeleteImageProduct.Command { ImagePublicId = imagePublicId });
+            return HandleResult(result);
+        }
+
+        [Authorize(Roles = SD.Role_Admin_Manager)]
+        [HttpPut("{productId}/setMain/{imageId}")]
+        public async Task<ActionResult> SetMainImage(string imageId, int productId)
+        {
+            var result = await Mediator.Send(new SetMainImage.Command { ImageId = imageId, ProductId = productId });
             return HandleResult(result);
         }
     }

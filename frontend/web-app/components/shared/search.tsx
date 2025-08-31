@@ -21,7 +21,7 @@ export default function Search() {
     setParams({ searchTerm: value });
   }
   return (
-    <div className="w-full flex">
+    <div className="w-full flex relative">
       <Input
         type="search"
         placeholder="Search..."
@@ -31,7 +31,7 @@ export default function Search() {
         value={value}
         onChange={handleChange}
       />
-      <Button onClick={handleSearch}>
+      <Button onClick={handleSearch} className="absolute top-0 right-0">
         <SearchIcon size={10} />
       </Button>
     </div>

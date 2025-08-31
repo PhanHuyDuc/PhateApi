@@ -2,7 +2,6 @@
 
 import { fetchWrapper } from "@/lib/fetchWrapper";
 import { PagedResult, Product } from "@/types";
-import { revalidatePath } from "next/cache";
 import { FieldValues } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -28,9 +27,7 @@ export async function createProduct(data: FieldValues) {
         value.forEach((file: File) => {
           formData.append("multiImages", file);
         });
-      } else if (typeof value === "number" || typeof value === "boolean") {
-        formData.append(key, value.toString());
-      } else if (value !== null && value !== undefined) {
+      } else {
         formData.append(key, value as any);
       }
     });
@@ -97,12 +94,20 @@ export async function getAdminProduct(
 export async function deleteImageProduct(id: string) {
   try {
     await fetchWrapper.del(`/products/image/${id}`);
-    
+
     return { success: true, message: "Deleted success" };
   } catch (error) {
     return {
       success: false,
       message: "Delete error:" + error,
     };
+  }
+}
+
+export async function setMainImage(imageId: string, productId: number) {
+  try {
+    await fetchWrapper.put(`/products/${productId}/setMain/${imageId}`, {});
+  } catch (error) {
+    toast.error("failed to set main image: " + error);
   }
 }

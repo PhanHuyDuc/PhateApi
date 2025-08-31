@@ -14,6 +14,14 @@ const links = [
     href: "/admin/products",
   },
   {
+    title: "Banners",
+    href: "/admin/banners",
+  },
+  {
+    title: "Banner Categories",
+    href: "/admin/bannerCats",
+  },
+  {
     title: "Menus",
     href: "/admin/menus",
   },
@@ -24,10 +32,6 @@ const links = [
   {
     title: "Infos",
     href: "/admin/infos",
-  },
-  {
-    title: "Users",
-    href: "/admin/users",
   },
 ];
 

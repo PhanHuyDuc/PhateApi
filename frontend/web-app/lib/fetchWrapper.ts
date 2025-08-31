@@ -29,6 +29,7 @@ async function post(url: string, body: unknown) {
   };
 
   const response = await fetch(baseUrl + url, requestOptions);
+
   return handleResponse(response);
 }
 
@@ -54,6 +55,7 @@ async function postFormData(url: string, formData: FormData) {
   };
 
   const response = await fetch(baseUrl + url, requestOptions);
+
   return handleResponse(response);
 }
 

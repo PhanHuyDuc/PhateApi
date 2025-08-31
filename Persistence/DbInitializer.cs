@@ -64,6 +64,8 @@ namespace Persistence
                 Slug = "A-fantasy-coffee-featuring-flounders",
                 Rating = "5",
                 NumReview = 10,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "system",
                 MultiImages = new List<MultiImage>
                 {
                     new MultiImage
@@ -94,6 +96,8 @@ namespace Persistence
                 Slug = "A-fantasy-coffee-featuring-flounders",
                 Rating = "4.5",
                 NumReview = 10,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "system",
                 MultiImages = new List<MultiImage>
                 {
                     new MultiImage
@@ -125,6 +129,8 @@ namespace Persistence
                     Order = 1,
                     IsActive = true,
                     Type = "Main",
+                    CreatedAt = DateTime.UtcNow,
+                CreatedBy = "system",
                     Level = 1
                 },
                 new(){
@@ -133,6 +139,8 @@ namespace Persistence
                     Order = 2,
                     IsActive = true,
                     Type = "Main",
+                    CreatedAt = DateTime.UtcNow,
+                CreatedBy = "system",
                     Level = 1
                 },
                 new(){
@@ -141,6 +149,8 @@ namespace Persistence
                     Order = 1,
                     IsActive = true,
                     Type = "Main",
+                    CreatedAt = DateTime.UtcNow,
+                CreatedBy = "system",
                     Level = 1
                 }
             };
@@ -157,6 +167,8 @@ namespace Persistence
                     PhoneNumber = "0813313333",
                     Email = "phatefantasy@flounderfantasy.com",
                     Url = "https://flounderfantasy.com",
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = "system",
                 };
                 await context.WebInfos.AddRangeAsync(webInfo);
             }

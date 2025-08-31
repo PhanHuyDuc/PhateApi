@@ -1,11 +1,12 @@
 namespace Domain
 {
-    public class Menu
+    public class Menu : Entity
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public string? Url { get; set; }        
+        public string? Url { get; set; }
         public int? ParentId { get; set; }
+        public string? ParentName { get; set; }
         public int Order { get; set; }
         public bool IsActive { get; set; }
         public required string Type { get; set; }

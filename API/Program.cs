@@ -1,6 +1,9 @@
 using API.Middleware;
+using Application.BannerCategories.Validators;
+using Application.Banners.Validators;
 using Application.Contacts.validators;
 using Application.Core;
+using Application.Features.Contents.Validators;
 using Application.Interfaces;
 using Application.Menus.Validators;
 using Application.Products.Queries;
@@ -36,6 +39,9 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateMenuValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateContactValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBannerCategoriesValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBannerValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateContentValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
 

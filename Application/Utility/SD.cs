@@ -5,6 +5,9 @@ namespace Application.Utility
         public const string Role_Admin = "Admin";
         public const string Role_Member = "Member";
         public const string Role_Manager = "Manager";
+        public const string Role_Admin_Manager = "Admin,Manager";
+
         public const string Cloudinary_Folder = "DailyCoffee";
+        public const string Cloudinary_Content_Folder = "Content";
     }
 }
