@@ -13,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import toast from "react-hot-toast";
+import { LoaderCircle } from "lucide-react";
 
 const DeleteDialog = ({
   id,
@@ -64,6 +65,7 @@ const DeleteDialog = ({
             onClick={handleDeleteClick}
             className="cursor-pointer "
           >
+            {isPending && <LoaderCircle className="animate-spin" />}
             {isPending ? "Deleting..." : "Delete"}
           </Button>
         </AlertDialogFooter>

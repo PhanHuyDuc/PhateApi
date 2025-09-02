@@ -5,9 +5,7 @@ import { fetchWrapper } from "../fetchWrapper";
 import toast from "react-hot-toast";
 import { FieldValues } from "react-hook-form";
 
-export async function getAdminBanner(
-  query: string
-): Promise<PagedResult<Banner>> {
+export async function getBanner(query: string): Promise<PagedResult<Banner>> {
   try {
     const result = await fetchWrapper.getPaginated(`/banners${query}`);
     return result;

@@ -68,7 +68,7 @@ namespace Application.Core
             CreateMap<CreateArtistDto, Artist>().ForMember(dest => dest.Id, opt => opt.Ignore());
 
             CreateMap<Content, ContentDto>()
-                .ForMember(dest => dest.ContentImages, opt => opt.MapFrom(src => src.ContentImages));
+                .ForMember(dest => dest.ContentImages, opt => opt.MapFrom(src => src.ContentImages.OrderBy(p => p.Order)));
             CreateMap<CreateContentDto, Content>()
                 .ForMember(dest => dest.Slug, opt => opt.Ignore())
                 .ForMember(dest => dest.ContentImages, opt => opt.Ignore());

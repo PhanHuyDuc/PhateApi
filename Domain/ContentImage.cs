@@ -12,6 +12,8 @@ namespace Domain
 
         public bool IsMain { get; set; }
 
+        public int Order { get; set; }
+
         [JsonIgnore]
         public Content Content { get; set; } = null!;
     }

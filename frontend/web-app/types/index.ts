@@ -79,6 +79,7 @@ export type Menu = {
   isActive: boolean;
   type: string;
   level: number;
+  children?: Menu[];
 };
 
 export type Contact = {
@@ -100,4 +101,29 @@ export type WebInfo = {
   email: string;
   phoneNumber: string;
   url: string;
+};
+
+export type Artist = {
+  id: string;
+  name: string;
+};
+
+export type Content = {
+  id: string;
+  name: string;
+  description: string;
+  slug: string;
+  tag: string;
+  artist: string;
+  favorite: boolean;
+  contentImages: ContentImage[];
+};
+
+export type ContentImage = {
+  id: string;
+  url: string;
+  publicId: string;
+  contentId: string;
+  order: number;
+  isMain: boolean;
 };

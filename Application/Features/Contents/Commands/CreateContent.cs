@@ -31,6 +31,7 @@ namespace Application.Features.Contents.Commands
                     foreach (var file in request.ContentImages)
                     {
                         var uploadResult = await imageService.UploadContentImage(file);
+
                         // Check if the upload was failed
                         if (uploadResult == null || uploadResult.Error != null)
                         {
@@ -39,21 +40,32 @@ namespace Application.Features.Contents.Commands
                             400
                         );
                         }
+
+                        // Extract order from file name (e.g., "1.webp" -> 1)
+                        string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                        int order = 0;
+                        if (!int.TryParse(fileName, out order))
+                        {
+                            order = content.ContentImages.Count + 1; // Fallback to sequential order
+                        }
+
                         // Create ContentImages entity
                         var contentImage = new ContentImage
                         {
                             Url = uploadResult.SecureUrl.AbsoluteUri,
                             PublicId = uploadResult.PublicId,
-                            Content = content, // Associate with product
-                            IsMain = isMainSet
+                            Content = content,
+                            IsMain = isMainSet,
+                            Order = order
                         };
 
                         content.ContentImages.Add(contentImage);
                         isMainSet = false; // Only the first image will be set as main
                     }
                 }
-                // Generate slug for the product
+                // Generate slug
                 content.Slug = request.ContentDto.Name.GenerateSlug(context.Contents);
+
                 content.CreatedAt = DateTime.UtcNow;
                 content.CreatedBy = contextAccessor.HttpContext?.User?.Identity?.Name ?? "system";
                 context.Contents.Add(content);

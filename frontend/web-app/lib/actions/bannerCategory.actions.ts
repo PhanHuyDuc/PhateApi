@@ -31,7 +31,7 @@ export async function deleteBannerCat(id: string) {
 
 export async function createBannerCat(data: FieldValues) {
   const result = await fetchWrapper.post(`/bannercategories`, data);
-  console.log(result);
+
   return result;
 }
 

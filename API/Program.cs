@@ -11,7 +11,9 @@ using Application.Products.Validators;
 using Domain;
 using FluentValidation;
 using Infrastructure.Photos;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -44,6 +46,15 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateBannerValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateContentValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
+// Increase request body size limit
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 200 * 1024 * 1024; // 200 MB in bytes
+});
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 200 * 1024 * 1024; // 200 MB in bytes
+});
 
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {

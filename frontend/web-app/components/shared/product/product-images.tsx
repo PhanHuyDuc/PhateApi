@@ -1,8 +1,8 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { MultiImage } from "@/types";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import ImageLoader from "../image-loader";
 
 type Props = {
   multiImage: MultiImage[];
@@ -19,7 +19,7 @@ export default function ProductImages({ multiImage }: Props) {
 
   return (
     <div className="space-y-4">
-      <Image
+      <ImageLoader
         src={
           current ||
           "https://cdn.pixabay.com/photo/2015/03/12/06/56/frame-669754_640.png"
@@ -39,7 +39,12 @@ export default function ProductImages({ multiImage }: Props) {
               current === image.url && "border-orange-500"
             )}
           >
-            <Image src={image.url || ""} alt="image" width={100} height={100} />
+            <ImageLoader
+              src={image.url || ""}
+              alt="image"
+              width={100}
+              height={100}
+            />
           </div>
         ))}
       </div>

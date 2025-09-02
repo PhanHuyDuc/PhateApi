@@ -8,8 +8,6 @@ import {
 } from "@/components/ui/sheet";
 import { EllipsisVertical } from "lucide-react";
 import UserButton from "./user-button";
-import { Input } from "@/components/ui/input";
-import Search from "../search";
 
 const Menu = () => {
   return (

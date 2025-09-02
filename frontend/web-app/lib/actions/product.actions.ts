@@ -5,10 +5,6 @@ import { PagedResult, Product } from "@/types";
 import { FieldValues } from "react-hook-form";
 import toast from "react-hot-toast";
 
-export async function getData(query: string): Promise<Product> {
-  const result = await fetchWrapper.get(`/products${query}`);
-  return result;
-}
 //get single product by slug
 export async function getProductBySlug(slug: string): Promise<Product> {
   const result = await fetchWrapper.get(`/products/${slug}`);

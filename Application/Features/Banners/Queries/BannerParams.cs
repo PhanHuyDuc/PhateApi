@@ -7,5 +7,6 @@ namespace Application.Banners.Queries
         public string? OrderBy { get; set; }
         public string? SearchTerm { get; set; }
 
+
     }
 }

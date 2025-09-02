@@ -36,11 +36,21 @@ namespace Application.Features.Contents.Commands
                         {
                             return Result<Unit>.Failure(uploadResult?.Error?.Message ?? "Failed to upload an image", 400);
                         }
+
+                        // Extract order from file name (e.g., "1.webp" -> 1)
+                        string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                        int order;
+                        if (!int.TryParse(fileName, out order))
+                        {
+                            order = content.ContentImages.Count + 1; // Fallback to sequential order
+                        }
+
                         var contentImage = new ContentImage
                         {
                             Url = uploadResult.SecureUrl.AbsoluteUri,
                             PublicId = uploadResult.PublicId,
                             Content = content,
+                            Order = order
                         };
                         content.ContentImages.Add(contentImage);
                     }

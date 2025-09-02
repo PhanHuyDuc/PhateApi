@@ -51,12 +51,12 @@ export default function AdminMenuPage() {
   const setParams = useParamsStore((state) => state.setParams);
 
   const pathName = usePathname();
-  
-    const reset = useParamsStore((state) => state.reset);
-  
-    useEffect(() => {
-      reset();
-    }, [pathName, reset]);
+
+  const reset = useParamsStore((state) => state.reset);
+
+  useEffect(() => {
+    reset();
+  }, [pathName, reset]);
 
   const onSuccess = () => {
     // Refresh data after successful deletion

@@ -18,7 +18,11 @@ export const authConfig = {
 
       //check admin and manager roles
       if (auth && adminPaths.some((p) => p.test(pathname))) {
-        const userRoles = (await getCurrentUser())?.roles || [];
+        const currentUser = await getCurrentUser();
+        const userRoles =
+          currentUser && Array.isArray((currentUser as any).roles)
+            ? (currentUser as any).roles
+            : [];
 
         const adminAccess = userRoles.toLocaleString();
 

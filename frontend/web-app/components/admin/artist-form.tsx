@@ -1,21 +1,20 @@
 "use client";
 
-import { Contact } from "@/types";
+import { createArtist, updateArtist } from "@/lib/actions/artist.actions";
+import { Artist } from "@/types";
 import { usePathname, useRouter } from "next/navigation";
-import { FieldValues, useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import InputForm from "../shared/input-form-hook";
-import TextAreaForm from "../shared/textarea-form-hook";
 import { Button } from "../ui/button";
 import { LoaderCircle } from "lucide-react";
-import { createBannerCat } from "@/lib/actions/bannerCategory.actions";
 
 type Props = {
-  contact?: Contact;
+  artists?: Artist;
 };
 
-export default function ContactForm({ contact }: Props) {
+export default function ArtistForm({ artists }: Props) {
   const router = useRouter();
 
   const pathName = usePathname();
@@ -31,31 +30,32 @@ export default function ContactForm({ contact }: Props) {
   });
 
   useEffect(() => {
-    if (contact) {
+    if (artists) {
       setTimeout(() => {
-        const { name, email, phoneNumber, description } = contact;
+        const { name } = artists;
         reset({
           name: name || "",
-          description: description || "",
-          email: email || "customer@gmail.com",
-          phoneNumber: phoneNumber || "",
         });
       }, 0);
     }
     setFocus("name");
-  }, [contact, reset, setFocus]);
+  }, [artists, reset, setFocus]);
 
   async function onSubmit(data: FieldValues) {
     try {
       let res;
-      if (pathName === "/admin/contacts/create") {
-        res = await createBannerCat(data);
+      if (pathName === "/admin/artists/create") {
+        res = await createArtist(data);
+      } else {
+        if (artists) {
+          res = await updateArtist(data, artists.id.toString());
+        }
       }
       if (res.error) {
         throw res.error;
       }
       toast.success("Successful");
-      router.push(`/contacts`);
+      router.push(`/admin/artists`);
     } catch (error: any) {
       toast.error(error.status + " " + error.message);
     }
@@ -66,23 +66,11 @@ export default function ContactForm({ contact }: Props) {
       <div className="flex flex-col md:flex-row gap-5">
         {/* Name */}
         <InputForm
-          label="Name"
+          label="Aritst Name"
           name="name"
           control={control}
           rules={{ required: "Name is required" }}
-        />
-        {/* Email */}
-        <InputForm label="Email" name="email" control={control} />
-        <InputForm label="Phone Number" name="phoneNumber" control={control} />
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-5">
-        {/* Description */}
-        <TextAreaForm
-          label="Description"
-          name="description"
-          control={control}
-          rules={{ required: "Description is required" }}
+          showlabel={true}
         />
       </div>
 
@@ -95,6 +83,13 @@ export default function ContactForm({ contact }: Props) {
         >
           {isSubmitting && <LoaderCircle className="animate-spin" />}
           {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
+        <Button
+          className="outline bg-gray-500 hover:bg-gray-700 cursor-pointer"
+          onClick={() => router.push("/admin/artists")}
+          type="button"
+        >
+          Cancel
         </Button>
       </div>
     </form>

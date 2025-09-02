@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { numberWithCommas } from "@/lib/numberWithCommas";
 import { Product } from "@/types";
-import Image from "next/image";
 import Link from "next/link";
+import ImageLoader from "../image-loader";
 type Props = {
   product: Product;
 };
@@ -16,12 +16,11 @@ const ProductCard = ({ product }: Props) => {
     <Card className="w-full max-w-sm">
       <CardHeader className="p-0 place-content-center">
         <Link href={`/products/${product.slug}`}>
-          <Image
+          <ImageLoader
             src={mainImage || ""}
             alt={product.name}
             height={300}
             width={300}
-            priority={true}
           />
         </Link>
       </CardHeader>

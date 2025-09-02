@@ -1,4 +1,5 @@
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Banners.Extensions
 {
@@ -9,11 +10,14 @@ namespace Application.Banners.Extensions
             query = orderBy switch
             {
                 "titleDesc" => query.OrderByDescending(x => x.Title),
+                "mainCat" => query.Where(x => x.BannerCategory!.Name == "Main Banner" && x.IsActive == true),
                 _ => query.OrderBy(x => x.Title)
             };
 
             return query;
         }
+
+
 
         public static IQueryable<Banner> Search(this IQueryable<Banner> query, string? searchTerm)
         {

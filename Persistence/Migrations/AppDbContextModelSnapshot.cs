@@ -233,6 +233,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsMain")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<string>("PublicId")
                         .IsRequired()
                         .HasColumnType("text");

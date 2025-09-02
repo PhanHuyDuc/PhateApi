@@ -6,6 +6,7 @@ using MediatR;
 using Persistence;
 using Microsoft.EntityFrameworkCore;
 using Application.Banners.Extensions;
+using System.Collections.Immutable;
 
 namespace Application.Banners.Queries
 {

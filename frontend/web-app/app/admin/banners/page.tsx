@@ -7,7 +7,7 @@ import { useShallow } from "zustand/shallow";
 import qs from "query-string";
 import {
   deleteBanner,
-  getAdminBanner,
+  getBanner,
   toggleBanner,
 } from "@/lib/actions/banner.actions";
 import { Button } from "@/components/ui/button";
@@ -54,12 +54,12 @@ export default function AdminBannerPage() {
   const setParams = useParamsStore((state) => state.setParams);
 
   const pathName = usePathname();
-  
-    const reset = useParamsStore((state) => state.reset);
-  
-    useEffect(() => {
-      reset();
-    }, [pathName, reset]);
+
+  const reset = useParamsStore((state) => state.reset);
+
+  useEffect(() => {
+    reset();
+  }, [pathName, reset]);
 
   const onSuccess = () => {
     // Refresh data after successful deletion
@@ -67,7 +67,7 @@ export default function AdminBannerPage() {
       { url: "", query: params },
       { skipEmptyString: true }
     );
-    getAdminBanner(currentUrl).then((data) => setData(data));
+    getBanner(currentUrl).then((data) => setData(data));
   };
 
   const url = qs.stringifyUrl(
@@ -83,7 +83,7 @@ export default function AdminBannerPage() {
   }
 
   useEffect(() => {
-    getAdminBanner(url).then((data) => {
+    getBanner(url).then((data) => {
       setData(data);
       setLoading(false);
     });

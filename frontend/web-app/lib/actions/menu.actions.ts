@@ -55,3 +55,27 @@ export async function toggleMenu(id: string) {
   await fetchWrapper.post(`/menus/toggle-active/${id}`, {});
   return { success: true, message: "Change success" };
 }
+
+export async function menuTree(items: Menu[]): Promise<Menu[]> {
+  const map = new Map<number, Menu>();
+  const roots: Menu[] = [];
+
+  // clone items into map with empty children
+  items.forEach((item) => {
+    map.set(item.id, { ...item, children: [] });
+  });
+
+  // build parent-child relationship
+  items.forEach((item) => {
+    if (item.parentId) {
+      const parent = map.get(item.parentId);
+      if (parent) {
+        parent.children?.push(map.get(item.id)!);
+      }
+    } else {
+      roots.push(map.get(item.id)!);
+    }
+  });
+
+  return roots;
+}

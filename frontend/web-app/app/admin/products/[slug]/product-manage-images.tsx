@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   deleteImageProduct,
@@ -8,6 +7,7 @@ import {
 } from "@/lib/actions/product.actions";
 import { Check, Loader, MinusIcon } from "lucide-react";
 import toast from "react-hot-toast";
+import ImageLoader from "@/components/shared/image-loader";
 
 export default function ProductManageImages({ images }: { images: any[] }) {
   const [list, setList] = useState(images);
@@ -43,7 +43,7 @@ export default function ProductManageImages({ images }: { images: any[] }) {
     <div className="grid grid-cols-5 gap-3">
       {list.map((img) => (
         <div key={img.publicId} className="relative group">
-          <Image
+          <ImageLoader
             src={img.url}
             alt="Product Image"
             height={200}

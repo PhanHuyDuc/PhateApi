@@ -10,6 +10,7 @@ namespace Application.Features.Contents.DTOs
         public string Slug { get; set; } = string.Empty;
         public required string Tag { get; set; }
         public required string Artist { get; set; }
+        public int Order { get; set; }
         public ICollection<ContentImage> ContentImages { get; set; } = [];
     }
 }

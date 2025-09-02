@@ -9,9 +9,18 @@ type Props = {
   alt: string;
   height: number;
   width: number;
+  sizes?: string;
+  className?: string;
 };
 
-export default function ImageLoader({ alt, height, src, width }: Props) {
+export default function ImageLoader({
+  alt,
+  height,
+  src,
+  width,
+  sizes,
+  className,
+}: Props) {
   const [isLoading, setIsLoading] = useState(true);
   return (
     <div className="relative flex items-center justify-center">
@@ -23,8 +32,12 @@ export default function ImageLoader({ alt, height, src, width }: Props) {
         src={src}
         width={width}
         height={height}
+        sizes={sizes}
+        priority={true}
         onLoadingComplete={() => setIsLoading(false)}
-        className={isLoading ? "opacity-0" : "opacity-100"}
+        className={
+          isLoading ? "opacity-0 " + className : "opacity-100 " + className
+        }
       />
     </div>
   );
