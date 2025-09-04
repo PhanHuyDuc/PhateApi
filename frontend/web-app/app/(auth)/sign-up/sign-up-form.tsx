@@ -104,7 +104,9 @@ export default function SignUpForm() {
           <SignUpButton />
         </div>
         {data && !data.success && (
-          <div className="text-center text-destructive">{data.message}</div>
+          <div className="text-center text-destructive">
+            {typeof data.message === "string" ? data.message : ""}
+          </div>
         )}
         <div className="text-sm text-center text-muted-foreground">
           Already have an account?{" "}

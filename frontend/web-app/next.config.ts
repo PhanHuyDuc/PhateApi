@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "200mb", // or "unlimited"
     },
   },
+  generateEtags: false,
 };
 
 export default nextConfig;

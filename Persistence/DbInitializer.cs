@@ -28,7 +28,7 @@ namespace Persistence
                     Email = "admin@flounderfantasy.com",
                     DisplayName = "Admin Flounder",
                     Bio = "Female",
-                    PictureUrl = "https://cdn.hentaicube.xyz/ext/2022/6/3/vao-nhung-ngay-oi-a/7/000.webp"
+                    PictureUrl = "https://cdn.pixabay.com/photo/2023/09/26/19/57/artistic-nude-8278143_640.png"
                 };
 
                 await userManager.CreateAsync(admin, "Password@123");
@@ -40,7 +40,7 @@ namespace Persistence
                     Email = "manager@flounderfantasy.com",
                     DisplayName = "Member Flounder",
                     Bio = "Female",
-                    PictureUrl = "https://i.hentaifox.com/003/2019342/1t.jpg"
+                    PictureUrl = "https://cdn.pixabay.com/photo/2023/09/26/19/57/artistic-nude-8278143_640.png"
                 };
 
                 await userManager.CreateAsync(manager, "Password@123");

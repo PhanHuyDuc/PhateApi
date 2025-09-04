@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Content } from "@/types";
-import Image from "next/image";
 import Link from "next/link";
 import ImageLoader from "../image-loader";
 type Props = {

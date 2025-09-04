@@ -4,9 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import MainNav from "./main-nav";
 import { getBanner } from "@/lib/actions/banner.actions";
+
+
 export const metadata = {
   title: "Admin",
 };
+
 export default async function AdminLayout({
   children,
 }: Readonly<{

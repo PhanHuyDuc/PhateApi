@@ -1,13 +1,8 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/lib/constants";
-import { Metadata } from "next";
 import Image from "next/image";
 
-export const metadata: Metadata = {
-  title: "Unauthorized Access",
-};
 const UnAuthorizedPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">

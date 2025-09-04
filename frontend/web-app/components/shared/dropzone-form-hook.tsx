@@ -7,7 +7,7 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
-import { AlertCircleIcon, MinusIcon, UploadIcon, X } from "lucide-react";
+import { AlertCircleIcon, MinusIcon, UploadIcon } from "lucide-react";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Alert, AlertTitle } from "../ui/alert";

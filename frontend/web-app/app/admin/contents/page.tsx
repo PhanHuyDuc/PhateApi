@@ -22,7 +22,6 @@ import Image from "next/image";
 import DeleteDialog from "@/components/shared/delete-dialog";
 import AppPagination from "@/components/shared/app-pagination";
 import EmptyData from "@/components/shared/empty-data";
-import { deleteArtist } from "@/lib/actions/artist.actions";
 
 export default function AdminContentPage() {
   const [loading, setLoading] = useState(true);

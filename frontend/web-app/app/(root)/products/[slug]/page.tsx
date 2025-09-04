@@ -1,6 +1,4 @@
 import ProductImages from "@/components/shared/product/product-images";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { getProductBySlug } from "@/lib/actions/product.actions";
 import { numberWithCommas } from "@/lib/numberWithCommas";
 import { notFound } from "next/navigation";

@@ -1,16 +1,13 @@
 services:
-  postgres:
-    image: postgres:latest
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgrespw
-      - POSTGRES_DB=phateapi
-    restart: always
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Password@123"
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - postgres-data:/var/lib/postgresql/data   
- 
+      - sql-data:/var/opt/mssql
+    platform: "linux/amd64"
 volumes:
-  postgres-data:
-
+  sql-data:
