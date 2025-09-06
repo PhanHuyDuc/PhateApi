@@ -12,6 +12,7 @@ namespace API.Controllers
 {
     public class ContentsController : BaseApiController
     {
+        [Authorize(Roles = SD.Role_Admin)]
         [HttpGet]
         public async Task<ActionResult<PagedList<ContentDto>>> GetContents([FromQuery] ContentParams Params)
         {
@@ -19,13 +20,14 @@ namespace API.Controllers
             Response.AddPaginationHeader(result.Value?.Metadata!);
             return HandleResult(result);
         }
+        [Authorize(Roles = SD.Role_Admin)]
         [HttpGet("{slug}")]
         public async Task<ActionResult<ContentDto>> GetContent(string slug)
         {
             var result = await Mediator.Send(new GetContentDetails.Query { Slug = slug });
             return HandleResult(result);
         }
-        [Authorize(Roles = SD.Role_Admin_Manager)]
+        [Authorize(Roles = SD.Role_Admin)]
         [HttpPost]
         public async Task<ActionResult<Content>> CreateContent([FromForm] CreateContentDto contentDto, [FromForm] IFormFileCollection? contentImages)
         {
@@ -36,7 +38,7 @@ namespace API.Controllers
             });
             return HandleResult(result);
         }
-        [Authorize(Roles = SD.Role_Admin_Manager)]
+        [Authorize(Roles = SD.Role_Admin)]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateContent(Guid id, [FromForm] UpdateContentDto contentDto, [FromForm] IFormFileCollection? contentImages)
         {
@@ -49,7 +51,7 @@ namespace API.Controllers
             });
             return HandleResult(result);
         }
-        [Authorize(Roles = SD.Role_Admin_Manager)]
+        [Authorize(Roles = SD.Role_Admin)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteContent(Guid id)
         {

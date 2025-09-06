@@ -63,7 +63,7 @@ export async function updateContent(data: FieldValues, id: string) {
     });
 
     const result = await fetchWrapper.putFormData(`/Contents/${id}`, formData);
-    
+
     return result;
   } catch (error) {
     return {
