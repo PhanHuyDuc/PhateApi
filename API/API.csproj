@@ -14,10 +14,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7" />
-    <Content Include="web.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7" />  
   </ItemGroup>
 
 </Project>
