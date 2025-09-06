@@ -5,7 +5,6 @@ import Link from "next/link";
 import MainNav from "./main-nav";
 import { getBanner } from "@/lib/actions/banner.actions";
 
-
 export const metadata = {
   title: "Admin",
 };
@@ -16,7 +15,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const banner = await getBanner("");
-  const logo = banner.results.find((x) => x.title === "Logo");
+  const logo = banner.results.find((x) => x.bannerCategory.name === "Logo");
   return (
     <>
       <div className="flex flex-col">
