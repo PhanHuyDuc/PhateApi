@@ -28,6 +28,8 @@ namespace API.Controllers
             return HandleResult(result);
         }
         [Authorize(Roles = SD.Role_Admin)]
+        [RequestSizeLimit(524288000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 524288000)]
         [HttpPost]
         public async Task<ActionResult<Content>> CreateContent([FromForm] CreateContentDto contentDto, [FromForm] IFormFileCollection? contentImages)
         {
