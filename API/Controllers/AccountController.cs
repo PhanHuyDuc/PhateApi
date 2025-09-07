@@ -32,7 +32,31 @@ namespace API.Controllers
             }
             return ValidationProblem();
         }
-        
+
+        [HttpPost("register-manager")]
+        public async Task<ActionResult> RegisterManager(RegisterDto registerDto)
+        {
+            var user = new User
+            {
+                UserName = registerDto.Email,
+                Email = registerDto.Email,
+                DisplayName = registerDto.DisplayName,
+                Bio = registerDto.Bio,
+                PictureUrl = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+            };
+
+            var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
+            var roleResult = await signInManager.UserManager.AddToRoleAsync(user, "Manager");
+
+            if (result.Succeeded && roleResult.Succeeded) return Ok();
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+            return ValidationProblem();
+        }
+
         [HttpGet("user-info")]
         public async Task<ActionResult> GetUserInfo()
         {

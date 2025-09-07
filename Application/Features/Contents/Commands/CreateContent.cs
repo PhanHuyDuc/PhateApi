@@ -14,20 +14,20 @@ namespace Application.Features.Contents.Commands
 {
     public class CreateContent
     {
-        public class Command : IRequest<Result<CreateContentResponse>>
+        public class Command : IRequest<Result<string>>
         {
             public required CreateContentDto ContentDto { get; set; }
             public required IFormFileCollection? ContentImages { get; set; }
         }
-        public class CreateContentResponse
-        {
-            public Guid Id { get; set; }
-            public string Message { get; set; } = string.Empty;
-        }
+        // public class CreateContentResponse
+        // {
+        //     public Guid Id { get; set; }
+        //     public string Message { get; set; } = string.Empty;
+        // }
 
-        public class Handler(AppDbContext context, IMapper mapper, IMultiImageService imageService, IHttpContextAccessor contextAccessor) : IRequestHandler<Command, Result<CreateContentResponse>>
+        public class Handler(AppDbContext context, IMapper mapper, IMultiImageService imageService, IHttpContextAccessor contextAccessor) : IRequestHandler<Command, Result<string>>
         {
-            public async Task<Result<CreateContentResponse>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var content = mapper.Map<Content>(request.ContentDto);
 
@@ -41,7 +41,7 @@ namespace Application.Features.Contents.Commands
                         // Check if the upload was failed
                         if (uploadResult == null || uploadResult.Error != null)
                         {
-                            return Result<CreateContentResponse>.Failure(
+                            return Result<string>.Failure(
                             uploadResult?.Error?.Message ?? "Failed to upload an image",
                             400
                         );
@@ -79,12 +79,8 @@ namespace Application.Features.Contents.Commands
                 var result = await context.SaveChangesAsync(cancellationToken) > 0;
 
                 return result
-                      ? Result<CreateContentResponse>.Success(new CreateContentResponse
-                      {
-                          Id = content.Id,
-                          Message = "Create Content success"
-                      })
-                      : Result<CreateContentResponse>.Failure("Failed to create content", 400);
+                      ? Result<string>.Success("Successful Create Content: " + content.Id)
+                      : Result<string>.Failure("Failed to create content", 400);
 
             }
         }
