@@ -17,7 +17,7 @@ export const metadata = {
 
 export default async function SignInPage() {
   const banner = await getBanner("");
-  const logo = banner.results.find((x) => x.bannerCategory.name === "Logo");
+  const logo = banner.results.find((x) => x.title === "Logo");
   return (
     <div className="w-full max-w-md mx-auto">
       <Card>

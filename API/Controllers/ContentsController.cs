@@ -58,6 +58,16 @@ namespace API.Controllers
             var result = await Mediator.Send(new DeleteContent.Command { Id = id });
             return HandleResult(result);
         }
-
+        [Authorize(Roles = SD.Role_Admin)]
+        [HttpPost("{id}/images")]
+        public async Task<ActionResult> AppendContentImages(Guid id, [FromForm] IFormFileCollection contentImages)
+        {
+            var result = await Mediator.Send(new AppendContentImages.Command
+            {
+                ContentId = id,
+                ContentImages = contentImages
+            });
+            return HandleResult(result);
+        }
     }
 }

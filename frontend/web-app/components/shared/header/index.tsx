@@ -9,7 +9,7 @@ import ImageLoader from "../image-loader";
 
 const Header = async () => {
   const banner = await getBanner("");
-  const logo = banner.results.find((x) => x.bannerCategory.name === "Logo");
+  const logo = banner.results.find((x) => x.title === "Logo");
   return (
     <header className="w-full border-b">
       <div className="wrapper flex-between">

@@ -49,11 +49,13 @@ builder.Services.AddTransient<ExceptionMiddleware>();
 // Increase request body size limit
 builder.Services.Configure<KestrelServerOptions>(options =>
 {
-    options.Limits.MaxRequestBodySize = 200 * 1024 * 1024; // 200 MB in bytes
+    options.Limits.MaxRequestBodySize = 500 * 1024 * 1024; // 500 MB in bytes
 });
 builder.Services.Configure<FormOptions>(options =>
 {
-    options.MultipartBodyLengthLimit = 200 * 1024 * 1024; // 200 MB in bytes
+    options.MultipartBodyLengthLimit = 500 * 1024 * 1024; // 500 MB in bytes
+    options.ValueLengthLimit = int.MaxValue; // Allow large form values
+    options.MultipartHeadersLengthLimit = int.MaxValue; // Allow large headers
 });
 
 builder.Services.AddIdentityApiEndpoints<User>(opt =>

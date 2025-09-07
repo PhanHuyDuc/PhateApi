@@ -15,7 +15,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const banner = await getBanner("");
-  const logo = banner.results.find((x) => x.bannerCategory.name === "Logo");
+  const logo = banner.results.find((x) => x.title === "Logo");
   return (
     <>
       <div className="flex flex-col">

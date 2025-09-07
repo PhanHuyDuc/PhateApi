@@ -7,6 +7,7 @@ using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Features.Contents.Commands
@@ -75,6 +76,7 @@ namespace Application.Features.Contents.Commands
                 return result
                  ? Result<string>.Success($"Create Content success, Id: {content.Id}")
                  : Result<string>.Failure("Failed to create content", 400);
+
             }
         }
     }
