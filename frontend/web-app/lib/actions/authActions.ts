@@ -17,6 +17,6 @@ export async function getCurrentUser() {
 }
 
 export async function register(user: RegisterInput): Promise<Account> {
-  const result = await fetchWrapper.post("/account/register", user);
+  const result = await fetchWrapper.post("/account/register-manager", user);
   return result as Account;
 }
