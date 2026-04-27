@@ -9,21 +9,21 @@ import ImageLoader from "../image-loader";
 
 const Header = async () => {
   const banner = await getBanner("");
-  const logo = banner.results.findLast(x=>x.title);
+  const logo = banner?.results?.findLast(x=>x.title);
   return (
     <header className="w-full border-b">
       <div className="wrapper flex-between">
         <div className="flex-start">
           <MenuDrawer />
           <Link href={"/"} className="flex-start ml-4">
-            {logo && (
+            {logo ? (
               <ImageLoader
                 src={logo.url}
                 alt={`${APP_NAME} logo`}
                 height={72}
                 width={72}
               />
-            )}
+            ):(<span className="font-bold">{APP_NAME}</span>)}
 
             <span className="hidden lg:block font-bold text-2xl ml-3">
               {APP_NAME}
