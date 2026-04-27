@@ -16,13 +16,13 @@ export const metadata = {
 };
 
 export default async function SignInPage() {
-  const banner = await getBanner("");
-  const logo = banner.results.find((x) => x.title === "Logo");
+  // const banner = await getBanner("");
+  // const logo = banner.results.find((x) => x.title === "Logo");
   return (
     <div className="w-full max-w-md mx-auto">
       <Card>
         <CardHeader className="space-y-4">
-          <Link href={"/"} className="flex-center">
+          {/* <Link href={"/"} className="flex-center">
             <Image
               src={logo?.url || ""}
               alt={`${APP_NAME} logo`}
@@ -30,7 +30,7 @@ export default async function SignInPage() {
               height={100}
               priority
             />
-          </Link>
+          </Link> */}
           <CardTitle className="text-center">Sign In</CardTitle>
           <CardDescription className="text-center">
             Sign in to your account
