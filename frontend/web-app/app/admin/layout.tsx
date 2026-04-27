@@ -14,18 +14,18 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const banner = await getBanner("");
-  // const logo = banner.results.find((x) => x.title === "Logo");
+  const banner = await getBanner("");
+  const logo = banner.results.find((x) => x.title === "Logo");
   return (
     <>
       <div className="flex flex-col">
         <div className="border-b container mx-auto">
           <div className="flex items-center h-16 px-4">
-            {/* <Link href={"/"} className="flex-start ml-4">
+            <Link href={"/"} className="flex-start ml-4">
               {logo && (
                 <Image src={logo.url} alt={APP_NAME} height={72} width={72} />
               )}
-            </Link> */}
+            </Link>
             <MainNav className="mx-6" />
             <div className="ml-auto items-center flex space-x-4">
               {/* <div>

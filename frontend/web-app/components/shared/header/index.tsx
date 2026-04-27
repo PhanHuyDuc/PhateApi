@@ -8,14 +8,14 @@ import ProductFilter from "../product/product-fiilter";
 import ImageLoader from "../image-loader";
 
 const Header = async () => {
-  // const banner = await getBanner("");
-  // const logo = banner?.results?.findLast(x=>x.title);
+  const banner = await getBanner("");
+  const logo = banner?.results?.findLast(x=>x.title);
   return (
     <header className="w-full border-b">
       <div className="wrapper flex-between">
         <div className="flex-start">
           <MenuDrawer />
-          {/* <Link href={"/"} className="flex-start ml-4">
+          <Link href={"/"} className="flex-start ml-4">
             {logo ? (
               <ImageLoader
                 src={logo.url}
@@ -28,7 +28,7 @@ const Header = async () => {
             <span className="hidden lg:block font-bold text-2xl ml-3">
               {APP_NAME}
             </span>
-          </Link>  */}
+          </Link> 
         </div>
         <div className="hidden md:flex">
           <ProductFilter />
