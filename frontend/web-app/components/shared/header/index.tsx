@@ -9,7 +9,7 @@ import ImageLoader from "../image-loader";
 
 const Header = async () => {
   const banner = await getBanner("");
-  const logo = banner.results.find((x) => x.title === "Logo");
+  const logo = banner.results.findLast(x=>x.title);
   return (
     <header className="w-full border-b">
       <div className="wrapper flex-between">
@@ -28,14 +28,14 @@ const Header = async () => {
             <span className="hidden lg:block font-bold text-2xl ml-3">
               {APP_NAME}
             </span>
-          </Link>
+          </Link> 
         </div>
         <div className="hidden md:flex">
           <ProductFilter />
           <Search />
         </div>
         <Menu />
-      </div>
+      </div> 
     </header>
   );
 };

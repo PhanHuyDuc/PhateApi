@@ -8,10 +8,10 @@ import toast from "react-hot-toast";
 import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 import InputForm from "../shared/input-form-hook";
 import SelectForm from "../shared/select-form-hook";
-import TextAreaForm from "../shared/textarea-form-hook";
 import { Button } from "../ui/button";
 import AppDropZone from "../shared/dropzone-form-hook";
 import { LoaderCircle } from "lucide-react";
+import QuillTextAreaForm from "../shared/quill-textarea-form-hook";
 
 type Props = {
   product?: Product;
@@ -164,13 +164,20 @@ export default function ProductForm({ product }: Props) {
       </div>
       <div className="flex flex-col md:flex-row gap-5">
         {/* Description */}
-        <TextAreaForm
+        <QuillTextAreaForm
           label="Description"
           name="description"
           control={control}
           showlabel={true}
           rules={{ required: "Description is required" }}
         />
+        {/* <TextAreaForm
+          label="Description"
+          name="description"
+          control={control}
+          showlabel={true}
+          rules={{ required: "Description is required" }}
+        /> */}
       </div>
       <div className="upload-field flex flex-col md:flex-row gap-5">
         {/* Image */}

@@ -1,4 +1,5 @@
 import ProductImages from "@/components/shared/product/product-images";
+import RenderRichText from "@/components/shared/render-richtext";
 import { getProductBySlug } from "@/lib/actions/product.actions";
 import { numberWithCommas } from "@/lib/numberWithCommas";
 import { notFound } from "next/navigation";
@@ -39,7 +40,7 @@ export default async function ProductDetailsPage({ params }: Props) {
           </div>
           <div className="mt-10">
             <p className="font-semibold">Description</p>
-            <p className="text-gray-600">{product.description}</p>
+            <RenderRichText description={product.description} />
           </div>
         </div>
         {/* <div>

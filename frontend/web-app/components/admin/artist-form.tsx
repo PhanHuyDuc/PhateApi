@@ -70,7 +70,6 @@ export default function ArtistForm({ artists }: Props) {
           name="name"
           control={control}
           rules={{ required: "Name is required" }}
-          showlabel={true}
         />
       </div>
 

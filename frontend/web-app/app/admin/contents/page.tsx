@@ -102,7 +102,6 @@ export default function AdminContentPage() {
               <TableRow>
                 <TableHead className="text-center">NUM</TableHead>
                 <TableHead className="text-center">NAME</TableHead>
-                <TableHead className="text-center">DESCRIPTION</TableHead>
                 <TableHead className="text-center">TAG</TableHead>
                 <TableHead className="text-center">ARTIST</TableHead>
                 <TableHead className="text-center">MAIN IMAGE</TableHead>
@@ -117,9 +116,6 @@ export default function AdminContentPage() {
                     {(params.pageNumber - 1) * params.pageSize + index + 1}
                   </TableCell>
                   <TableCell>{content.name}</TableCell>
-                  <TableCell className="text-center">
-                    {content.description}
-                  </TableCell>
                   <TableCell>{content.tag}</TableCell>
                   <TableCell className="text-center">
                     {content.artist}

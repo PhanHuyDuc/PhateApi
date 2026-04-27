@@ -2,17 +2,11 @@
 
 import { Banner, PagedResult } from "@/types";
 import { fetchWrapper } from "../fetchWrapper";
-import toast from "react-hot-toast";
 import { FieldValues } from "react-hook-form";
 
 export async function getBanner(query: string): Promise<PagedResult<Banner>> {
-  try {
-    const result = await fetchWrapper.getPaginated(`/banners${query}`);
-    return result;
-  } catch (error: any) {
-    toast.error("Failed to get data " + error.message);
-    throw error;
-  }
+  const result = await fetchWrapper.getPaginated(`/banners${query}`);
+  return result;
 }
 
 export async function getBannerById(id: string): Promise<Banner> {
