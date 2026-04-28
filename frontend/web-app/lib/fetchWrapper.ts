@@ -1,6 +1,7 @@
 import { SERVER_URL } from "./constants";
 import { getCurrentUser } from "./actions/authActions";
 import toast from "react-hot-toast";
+import { auth } from "@/auth";
 
 const baseUrl = SERVER_URL;
 
@@ -151,17 +152,18 @@ async function handlePaginatedResponse(response: Response) {
   }
 }
 
-interface Session {
-  cookies?: string;
-}
+// interface Session {
+//   cookies?: string;
+// }
 
 async function getHeaders(): Promise<Headers> {
-  const session = (await getCurrentUser()) as Session;
+  // const session = (await getCurrentUser()) as Session;
+  const session = await auth();
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
 
-  if (session && session.cookies) {
-    headers.set("Cookie", session.cookies);
+  if (session && session.accessToken) {
+    headers.set("Authorization", `Bearer ${session.accessToken}`);
   }
 
   return headers;
