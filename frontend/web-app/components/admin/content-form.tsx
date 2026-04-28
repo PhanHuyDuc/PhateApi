@@ -14,6 +14,7 @@ import { LoaderCircle } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { getArtist } from "@/lib/actions/artist.actions";
 import MultiSelectForm from "../shared/multi-select-form";
+import { getSession } from "next-auth/react";
 
 type Props = {
   content?: Content;
@@ -75,6 +76,12 @@ export default function ContentForm({ content }: Props) {
 
   async function onSubmit(data: FieldValues) {
     try {
+      const session = await getSession();
+      const token = session?.accessToken;
+      if (!token) {
+      toast.error("You are not logged in!");
+      return;
+    }
       let res;
       // 1. move FormData from Server Action
       const formData = new FormData();
@@ -95,7 +102,9 @@ export default function ContentForm({ content }: Props) {
         const response = await fetch(`${API_URL}/Contents`, {
           method: "POST",
           body: formData,
-          credentials: "include",
+          headers: {        
+        "Authorization": `Bearer ${token}` 
+      }
         });
 
         if (!response.ok) {
@@ -112,7 +121,9 @@ export default function ContentForm({ content }: Props) {
           const response = await fetch(`${API_URL}/Contents/${content.id}`, {
             method: "PUT",
             body: formData,
-            credentials: "include", 
+            headers: {        
+        "Authorization": `Bearer ${token}` 
+      }
           });
 
           if (!response.ok) {
