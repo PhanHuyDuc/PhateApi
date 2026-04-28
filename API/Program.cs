@@ -74,15 +74,21 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
 builder.Services.Configure<CloudinarySettings>(builder.Configuration
     .GetSection("Cloudinary"));
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
-    .AllowCredentials()
-    .WithOrigins("http://localhost:3000", "http://localhost:5001","AllowVercel"));
 
+app.UseRouting();
+
+app.UseCors("AllowVercel");
 
 app.UseAuthentication();
 app.UseAuthorization();
