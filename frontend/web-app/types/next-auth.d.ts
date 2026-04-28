@@ -36,5 +36,6 @@ declare module "next-auth/jwt" {
     bio: string;
     roles: string[];
     cookies: string;
+    accessToken: string;
   }
 }

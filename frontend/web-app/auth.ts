@@ -32,7 +32,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               password: credentials.password,
             }),
           });
-          // Extract Set-Cookie headers (array in Node.js fetch)
+          // EXTRACT THE TOKEN 
+          const loginData = await loginResponse.json();
+          const backendToken = loginData.accessToken;
+          // Extract Set-Cookie headers
           const cookies = loginResponse.headers.getSetCookie() || [];
           const cookieHeader = cookies.join("; ");
           if (!loginResponse.ok) {
@@ -79,8 +82,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             bio: userData.bio,
             roles: userData.roles,
             displayName: userData.displayName,
-            accessToken: userData.access_token,
-            cookies: cookieHeader,
+            accessToken: backendToken,
+            cookies: cookieHeader,            
           };
         } catch (error) {
           toast.error("Authorize error:" + error);
