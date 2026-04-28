@@ -29,7 +29,16 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVercel", policy =>
+    {
+        policy.WithOrigins("https://phate-api.vercel.app", "http://localhost:3000") // Allow frontend URLs
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // Required if using authentication cookies
+    });
+});
 builder.Services.AddMediatR(x =>
 {
     x.RegisterServicesFromAssemblyContaining<GetProductList.Handler>();

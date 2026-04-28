@@ -76,20 +76,58 @@ export default function ContentForm({ content }: Props) {
   async function onSubmit(data: FieldValues) {
     try {
       let res;
+      // 1. move FormData from Server Action
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (key === "contentImages" && Array.isArray(value)) {
+          value.forEach((file: File) => {
+            formData.append("contentImages", file);
+          });
+        } else {
+          formData.append(key, value as any);
+        }
+      });
+      
+      const API_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+      
       if (pathName === "/admin/contents/create") {
-        res = await createContent(data);
+        // 2. Direct browser-to-Azure fetch for CREATE
+        const response = await fetch(`${API_URL}/Contents`, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+           const errText = await response.text();
+           throw new Error(`Upload failed: ${response.status} - ${errText}`);
+        }
+        
+        // Parse response JSON returns 
+        res = await response.json().catch(() => ({})); 
+
       } else {
         if (content) {
-          res = await updateContent(data, content.id);
+          // 3. Direct browser-to-Azure fetch for UPDATE
+          const response = await fetch(`${API_URL}/Contents/${content.id}`, {
+            method: "PUT",
+            body: formData,
+            credentials: "include", 
+          });
+
+          if (!response.ok) {
+             const errText = await response.text();
+             throw new Error(`Update failed: ${response.status} - ${errText}`);
+          }
+          res = await response.json().catch(() => ({}));
         }
       }
-      if (res.error) {
-        throw res.error;
-      }
+
       toast.success("Successful");
       router.push(`/admin/contents`);
+      
     } catch (error: any) {
-      toast.error(error.status + " " + error.message);
+      toast.error(error.message || "Something went wrong!");
     }
   }
 
