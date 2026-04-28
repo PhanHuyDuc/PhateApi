@@ -23,6 +23,7 @@ declare module "next-auth" {
     bio: string;
     roles: string[];
     cookies: string;
+    accessToken: string;
   }
 }
 

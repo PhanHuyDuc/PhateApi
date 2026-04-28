@@ -79,6 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             bio: userData.bio,
             roles: userData.roles,
             displayName: userData.displayName,
+            accessToken: userData.access_token,
             cookies: cookieHeader,
           };
         } catch (error) {
@@ -102,6 +103,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.roles = user.roles;
         token.displayName = user.displayName;
         token.cookies = user.cookies;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
@@ -114,6 +116,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.roles = token.roles;
         session.user.displayName = token.displayName;
         session.user.cookies = token.cookies;
+        session.accessToken = token.accessToken as string;
       }
       return session;
     },
