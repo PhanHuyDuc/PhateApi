@@ -7,7 +7,7 @@ export const SERVER_URL =
 export const NEXTAUTH_URL = process.env.NEXTAUTH_URL || "http://localhost:3000";
 export const NEXTAUTH_URL_LOGIN =
   process.env.NEXTAUTH_URL_LOGIN ||
-  "http://localhost:5001/api/login?useCookies=true";
+  "http://localhost:5001/api/login";
 export const NEXTAUTH_URL_GETCURRENTUSER =
   process.env.NEXTAUTH_URL_GETCURRENTUSER ||
   "http://localhost:5001/api/account/user-info";

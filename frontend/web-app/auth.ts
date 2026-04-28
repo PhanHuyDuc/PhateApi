@@ -4,7 +4,6 @@ import {
   NEXTAUTH_URL_GETCURRENTUSER,
   NEXTAUTH_URL_LOGIN,
 } from "./lib/constants";
-import toast from "react-hot-toast";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -32,12 +31,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               password: credentials.password,
             }),
           });
+          if (!loginResponse.ok) {
+            throw new Error("Invalid email or password");
+          }
           // EXTRACT THE TOKEN 
           const loginData = await loginResponse.json();
           const backendToken = loginData.accessToken;
           // Extract Set-Cookie headers
-          const cookies = loginResponse.headers.getSetCookie() || [];
-          const cookieHeader = cookies.join("; ");
+          // const cookies = loginResponse.headers.getSetCookie() || [];
+          // const cookieHeader = cookies.join("; ");
           if (!loginResponse.ok) {
             throw new Error("Invalid email or password");
           }
@@ -45,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const userResponse = await fetch(NEXTAUTH_URL_GETCURRENTUSER, {
             method: "GET",
             headers: {
-              Cookie: cookieHeader, // Manually forward cookies
+              "Authorization": `Bearer ${backendToken}`, 
             },
           });
 
@@ -81,12 +83,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             pictureUrl: userData.pictureUrl,
             bio: userData.bio,
             roles: userData.roles,
-            displayName: userData.displayName,
+            displayName: userData.displayName,            
+            cookies: "",            
             accessToken: backendToken,
-            cookies: cookieHeader,            
           };
-        } catch (error) {
-          toast.error("Authorize error:" + error);
+        } catch (error: any) {
+          console.error("Authorize error:", error.message);
           return null;
         }
       },
