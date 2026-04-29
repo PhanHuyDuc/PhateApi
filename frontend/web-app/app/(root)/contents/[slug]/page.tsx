@@ -1,4 +1,4 @@
-import ImageLoader from "@/components/shared/image-loader";
+import ContentLoadImage from "@/components/shared/content/content-load-image";
 import ScrollToTopButton from "@/components/shared/scroll-to-top-button";
 import {
   Breadcrumb,
@@ -18,7 +18,7 @@ type Props = {
 export default async function ContentDetails({ params }: Props) {
   const { slug } = await params;
   const content = await getContentBySlug(slug);
-  const images = content.contentImages;
+  const images = content.contentImages || [];
   if (!content) {
     return notFound();
   }
@@ -41,7 +41,9 @@ export default async function ContentDetails({ params }: Props) {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="place-content-center">
+
+      <ContentLoadImage images={images}/>
+      {/* <div className="place-content-center">
         {content && content.contentImages ? (
           images.map((img) => (
             <ImageLoader
@@ -55,7 +57,7 @@ export default async function ContentDetails({ params }: Props) {
         ) : (
           <div>Not image yet</div>
         )}
-      </div>
+      </div> */}
       <ScrollToTopButton />
     </>
   );
