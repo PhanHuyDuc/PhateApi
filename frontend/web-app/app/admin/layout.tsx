@@ -23,7 +23,7 @@ export default async function AdminLayout({
           <div className="flex items-center h-16 px-4">
             <Link href={"/"} className="flex-start ml-4">
               {logo && (
-                <Image src={logo.url} alt={APP_NAME} height={72} width={72} />
+                <Image src={logo.url} alt={APP_NAME} height={42} width={42} />
               )}
             </Link>
             <MainNav className="mx-6" />

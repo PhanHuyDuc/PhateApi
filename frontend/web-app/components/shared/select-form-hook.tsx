@@ -36,7 +36,7 @@ export default function SelectForm(props: Props) {
         <SelectTrigger className="w-full">
           <SelectValue placeholder={props.placeholder} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="max-h-[400px] overflow-y-auto">
           {props.data.map((item) => (
             <SelectItem key={item.value} value={item.value}>
               {item.label}
