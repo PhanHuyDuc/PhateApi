@@ -14,18 +14,18 @@ const pageSizeButton = [4, 8, 12];
 
 const orderButton = [
   { label: "A-Z", icon: ArrowUpAZ, value: "name" },
-  { label: "Giá thấp đến cao", icon: ArrowUp01, value: "price" },
-  { label: "Cao đến thấp", icon: ArrowDown10, value: "priceDesc" },
+  { label: "Price low to high", icon: ArrowUp01, value: "price" },
+  { label: "Price high to low", icon: ArrowDown10, value: "priceDesc" },
 ];
 
 const filterButton = [
-  { label: "CAFÉ", icon: List, value: "CAFÉ" },
-  { label: "ĐÁ XAY", icon: List, value: "ĐÁ XAY" },
-  { label: "LATTE", icon: List, value: "LATTE" },
-  { label: "MILK FOAM", icon: List, value: "MILK FOAM" },
-  { label: "SINH TỐ", icon: List, value: "SINH TỐ" },
-  { label: "YAOURT", icon: List, value: "YAOURT" },
-  { label: "TRÀ SỮA", icon: List, value: "TRÀ SỮA" },
+  { label: "SCIENCE", icon: List, value: "SCIENCE" },
+  { label: "LITERATURE", icon: List, value: "LITERATURE" },
+  { label: "RECOMMENDED", icon: List, value: "RECOMMENDED" },
+  { label: "DEVELOPER", icon: List, value: "DEVELOPER" },
+  { label: "DETECTIVE", icon: List, value: "DETECTIVE" },
+  { label: "HORROR", icon: List, value: "HORROR" },
+  { label: "LIGHT NOVEL", icon: List, value: "LIGHT NOVEL" },
 ];
 
 export default function ProductFilter() {

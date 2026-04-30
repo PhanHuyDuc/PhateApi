@@ -6,7 +6,7 @@ type Props = {
 const ProductList = ({ products }: Props) => {
   return (
     <div className="my-10">
-      <h2 className="h2-bold mb-4">CAFÉ TODAY</h2>
+      <h2 className="h2-bold mb-4">RECOMMEND BOOKS TODAY</h2>
       {products && products.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {products.map((product) => (
@@ -15,7 +15,7 @@ const ProductList = ({ products }: Props) => {
         </div>
       ) : (
         <div>
-          <p>No products found</p>
+          <p>No books found</p>
         </div>
       )}
     </div>
