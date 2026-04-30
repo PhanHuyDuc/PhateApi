@@ -11,6 +11,7 @@ using Application.Products.Validators;
 using Domain;
 using FluentValidation;
 using Infrastructure.Photos;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -82,6 +83,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration
     .GetSection("Cloudinary"));
+
+builder.Services.Configure<BearerTokenOptions>(IdentityConstants.BearerScheme, options =>
+{
+    options.BearerTokenExpiration = TimeSpan.FromDays(30);
+});
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();

@@ -1,5 +1,4 @@
 import { SERVER_URL } from "./constants";
-import { getCurrentUser } from "./actions/authActions";
 import toast from "react-hot-toast";
 import { auth } from "@/auth";
 
