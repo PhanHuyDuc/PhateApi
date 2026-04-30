@@ -24,6 +24,7 @@ declare module "next-auth" {
     roles: string[];
     cookies: string;
     accessToken: string;
+    expiresAt: number;
   }
 }
 
@@ -37,5 +38,6 @@ declare module "next-auth/jwt" {
     roles: string[];
     cookies: string;
     accessToken: string;
+    expiresAt: number;
   }
 }

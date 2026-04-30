@@ -37,6 +37,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           // EXTRACT THE TOKEN 
           const loginData = await loginResponse.json();
           const backendToken = loginData.accessToken;
+          // preventing requests from failing mid-flight.
+          const tokenExpiresAt = Date.now() + (loginData.expiresIn * 1000) - 10000;
           // Extract Set-Cookie headers
           // const cookies = loginResponse.headers.getSetCookie() || [];
           // const cookieHeader = cookies.join("; ");
@@ -86,6 +88,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             displayName: userData.displayName,            
             cookies: "",            
             accessToken: backendToken,
+            expiresAt: tokenExpiresAt,
           };
         } catch (error: any) {
           console.error("Authorize error:", error.message);
@@ -109,6 +112,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.displayName = user.displayName;
         token.cookies = user.cookies;
         token.accessToken = user.accessToken;
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        token.expiresAt - user.expiresAt;
+      }
+      // The Expiration Check: Runs on every single request
+      if (token.expiresAt && Date.now() > token.expiresAt) {
+        console.log("Token expired! Destroying NextAuth session...");
+        // returning an empty object or stripping the token data forces a logout.
+        return {} as any; 
       }
       return token;
     },
