@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
     },
   },
   generateEtags: false,
+  skipTrailingSlashRedirect: true,
 };
 
 export default nextConfig;
