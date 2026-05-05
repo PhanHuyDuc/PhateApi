@@ -57,8 +57,8 @@ export default function ContentLoadImage({ images }: { images: ImageProps[] }) {
           key={img.id}
           src={img.url}
           alt={img.order?.toString() || "Content image"}
-          height={720}
-          width={1080}
+          height={1816}
+          width={1280}
         />
         </div>
       ))}
