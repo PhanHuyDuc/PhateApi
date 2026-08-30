@@ -13,6 +13,8 @@ namespace Application.Features.Contents.DTOs
         public required string Artist { get; set; }
         public bool Favorite { get; set; }
         public int Order { get; set; }
+        public string? IdempotencyKey { get; set; }
+
         public ICollection<ContentImage> ContentImages { get; set; } = [];
     }
 }

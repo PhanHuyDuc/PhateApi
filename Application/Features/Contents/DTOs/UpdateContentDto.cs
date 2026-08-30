@@ -11,6 +11,8 @@ namespace Application.Features.Contents.DTOs
         public required string Tag { get; set; }
         public required string Artist { get; set; }
         public int Order { get; set; }
+        public string? IdempotencyKey { get; set; }
+
         public ICollection<ContentImage> ContentImages { get; set; } = [];
     }
 }

@@ -99,11 +99,13 @@ export default function ContentForm({ content }: Props) {
       
       if (pathName === "/admin/contents/create") {
         // 2. Direct browser-to-Azure fetch for CREATE
+        const idempotencyKey = crypto.randomUUID(); // one key per submit attempt
         const response = await fetch(`${API_URL}/Contents`, {
           method: "POST",
           body: formData,
           headers: {        
-        "Authorization": `Bearer ${token}` 
+        "Authorization": `Bearer ${token}`,
+        "Idempotency-Key": idempotencyKey, 
       }
         });
 

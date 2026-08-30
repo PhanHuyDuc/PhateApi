@@ -11,6 +11,8 @@ namespace Domain
         public required string Tag { get; set; }
         public required string Artist { get; set; }
         public bool Favorite { get; set; }
+        public string? IdempotencyKey { get; set; }
+
         public ICollection<ContentImage> ContentImages { get; set; } = [];
 
     }

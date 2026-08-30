@@ -18,6 +18,8 @@ namespace Application.Features.Contents.Commands
         {
             public required CreateContentDto ContentDto { get; set; }
             public required IFormFileCollection? ContentImages { get; set; }
+            public string? IdempotencyKey { get; set; }
+
         }
         // public class CreateContentResponse
         // {
@@ -27,103 +29,76 @@ namespace Application.Features.Contents.Commands
 
         public class Handler(AppDbContext context, IMapper mapper, IMultiImageService imageService, IHttpContextAccessor contextAccessor) : IRequestHandler<Command, Result<string>>
         {
-            private const int MaxRetryAttempts = 10; // e.g., retry up to 10 times
-            private const int InitialRetryDelayMs = 30000; // 30 seconds initial delay
-            private const int MaxRetryDelayMs = 60000; // 1 minute max delay
+            private const int MaxRetryAttempts = 5;
+            private const int InitialRetryDelayMs = 5000;
+            private const int MaxRetryDelayMs = 20000;
+            private const int MaxConcurrentUploads = 5;
+
 
             public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
             {
+                // 0. Early-exit if this exact submission already succeeded
+                if (!string.IsNullOrWhiteSpace(request.IdempotencyKey))
+                {
+                    var existing = await context.Contents
+                        .FirstOrDefaultAsync(c => c.IdempotencyKey == request.IdempotencyKey, cancellationToken);
 
+                    if (existing != null)
+                    {
+                        return Result<string>.Success("Successful Create Content: " + existing.Id);
+                    }
+                }
 
                 var uploadedImages = new List<(string Url, string PublicId, int Order, bool IsMain)>();
 
                 if (request.ContentImages != null && request.ContentImages.Count > 0)
                 {
-                    bool isMainSet = true;
+                    // Precompute order/isMain BEFORE parallelizing (order depends on position, not completion time)
+                    var plannedUploads = new List<(IFormFile File, int Order, bool IsMain)>();
                     int sequentialOrder = 1;
+                    bool first = true;
 
                     foreach (var file in request.ContentImages)
                     {
-                        // Extract order from file name (e.g., "1.webp" -> 1)
                         string fileName = Path.GetFileNameWithoutExtension(file.FileName);
-                        int order = sequentialOrder;
-                        if (int.TryParse(fileName, out int parsedOrder))
+                        int order = int.TryParse(fileName, out int parsedOrder) ? parsedOrder : sequentialOrder;
+                        if (!int.TryParse(fileName, out _)) sequentialOrder++;
+
+                        plannedUploads.Add((file, order, first));
+                        first = false;
+                    }
+
+                    using var semaphore = new SemaphoreSlim(MaxConcurrentUploads);
+                    using var failureCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                    Exception? firstFailure = null;
+
+                    var tasks = plannedUploads.Select(async item =>
+                    {
+                        await semaphore.WaitAsync(failureCts.Token);
+                        try
                         {
-                            order = parsedOrder;
+                            if (failureCts.IsCancellationRequested) return;
+
+                            var uploadResult = await UploadWithRetry(item.File, failureCts.Token);
+                            uploadedImages.Add((uploadResult.SecureUrl.AbsoluteUri, uploadResult.PublicId, item.Order, item.IsMain));
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            sequentialOrder++; // Increment for next fallback
+                            firstFailure ??= ex;
+                            failureCts.Cancel(); // stop other in-flight/queued uploads early
                         }
-
-                        // Retry logic for upload
-                        CloudinaryDotNet.Actions.UploadResult? uploadResult = null;
-                        int attempt = 0;
-                        bool success = false;
-                        int currentDelay = InitialRetryDelayMs;
-
-                        while (attempt < MaxRetryAttempts && !success)
+                        finally
                         {
-                            try
-                            {
-                                uploadResult = await imageService.UploadContentImage(file);
-                                if (uploadResult != null && uploadResult.Error == null)
-                                {
-                                    success = true;
-                                }
-                                else
-                                {
-                                    attempt++;
-                                    if (attempt < MaxRetryAttempts)
-                                    {
-                                        // Exponential backoff with jitter
-                                        int jitter = new Random().Next(-5000, 5000); // +/- 5 seconds jitter
-                                        await Task.Delay(currentDelay + jitter, cancellationToken);
-                                        currentDelay = Math.Min(currentDelay * 2, MaxRetryDelayMs); // Double delay, cap at max
-                                    }
-                                }
-                            }
-                            catch (Exception ex) // Catch network-related exceptions
-                            {
-                                // Assuming exceptions like HttpRequestException, TimeoutException, etc., indicate network issues
-                                if (IsNetworkException(ex))
-                                {
-                                    attempt++;
-                                    if (attempt < MaxRetryAttempts)
-                                    {
-                                        int jitter = new Random().Next(-5000, 5000);
-                                        await Task.Delay(currentDelay + jitter, cancellationToken);
-                                        currentDelay = Math.Min(currentDelay * 2, MaxRetryDelayMs);
-                                    }
-                                }
-                                else
-                                {
-                                    // Non-network error, fail immediately
-                                    await RollbackUploads(uploadedImages, imageService);
-                                    return Result<string>.Failure(ex.Message ?? "Unexpected error during upload", 500);
-                                }
-                            }
+                            semaphore.Release();
                         }
+                    });
 
-                        if (!success)
-                        {
-                            // After retries, if still failed, rollback previous uploads
-                            await RollbackUploads(uploadedImages, imageService);
-                            return Result<string>.Failure(
-                                uploadResult?.Error?.Message ?? "Failed to upload an image after retries",
-                                400
-                            );
-                        }
+                    await Task.WhenAll(tasks);
 
-                        // Store successful upload info
-                        uploadedImages.Add((
-                            uploadResult!.SecureUrl.AbsoluteUri,
-                            uploadResult.PublicId,
-                            order,
-                            isMainSet
-                        ));
-
-                        isMainSet = false; // Only the first image will be set as main
+                    if (firstFailure != null)
+                    {
+                        await RollbackUploads(uploadedImages.ToList(), imageService);
+                        return Result<string>.Failure(firstFailure.Message ?? "Failed to upload images", 400);
                     }
                 }
 
@@ -145,33 +120,63 @@ namespace Application.Features.Contents.Commands
                         });
                     }
 
-                    // Do the slug generation and metadata here
                     content.Slug = request.ContentDto.Name.GenerateSlug(context.Contents);
                     content.CreatedAt = DateTime.UtcNow;
                     content.CreatedBy = contextAccessor.HttpContext?.User?.Identity?.Name ?? "system";
+                    content.IdempotencyKey = request.IdempotencyKey;
 
                     context.Contents.Add(content);
-                    
-                    var result = await context.SaveChangesAsync(cancellationToken) > 0;
-                    if (result)
-                    {
-                        return Result<string>.Success("Successful Create Content: " + content.Id);
-                    }
-                    else
-                    {
-                        // If DB save fails, rollback uploads
-                        await RollbackUploads(uploadedImages, imageService);
-                        return Result<string>.Failure("Failed to create content", 400);
-                    }
+                    await context.SaveChangesAsync(cancellationToken);
+
+                    return Result<string>.Success("Successful Create Content: " + content.Id);
+                }
+                catch (DbUpdateException) when (!string.IsNullOrWhiteSpace(request.IdempotencyKey))
+                {
+                    // Unique constraint hit = a duplicate/racing request already created this content.
+                    // Don't fail the user — return the record that won, and clean up our now-orphaned images.
+                    await RollbackUploads(uploadedImages.ToList(), imageService);
+
+                    var winner = await context.Contents
+                        .FirstOrDefaultAsync(c => c.IdempotencyKey == request.IdempotencyKey, cancellationToken);
+
+                    return winner != null
+                        ? Result<string>.Success("Successful Create Content: " + winner.Id)
+                        : Result<string>.Failure("Failed to create content", 400);
                 }
                 catch (Exception ex)
                 {
-                    // If exception during save, rollback
-                    await RollbackUploads(uploadedImages, imageService);
+                    await RollbackUploads(uploadedImages.ToList(), imageService);
                     return Result<string>.Failure(ex.Message ?? "Failed to save content", 500);
                 }
             }
 
+            private async Task<CloudinaryDotNet.Actions.UploadResult> UploadWithRetry(IFormFile file, CancellationToken cancellationToken)
+            {
+                int attempt = 0;
+                int currentDelay = InitialRetryDelayMs;
+
+                while (true)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    try
+                    {
+                        var uploadResult = await imageService.UploadContentImage(file);
+                        if (uploadResult != null && uploadResult.Error == null)
+                            return uploadResult;
+
+                        throw new Exception(uploadResult?.Error?.Message ?? "Upload failed");
+                    }
+                    catch (Exception ex) when (IsNetworkException(ex))
+                    {
+                        attempt++;
+                        if (attempt >= MaxRetryAttempts) throw;
+
+                        int jitter = Random.Shared.Next(-2000, 2000);
+                        await Task.Delay(Math.Max(1000, currentDelay + jitter), cancellationToken);
+                        currentDelay = Math.Min(currentDelay * 2, MaxRetryDelayMs);
+                    }
+                }
+            }
             private async Task RollbackUploads(List<(string Url, string PublicId, int Order, bool IsMain)> uploadedImages, IMultiImageService imageService)
             {
                 foreach (var image in uploadedImages)

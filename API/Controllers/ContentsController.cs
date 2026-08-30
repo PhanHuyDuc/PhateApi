@@ -31,10 +31,14 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Content>> CreateContent([FromForm] CreateContentDto contentDto, [FromForm] IFormFileCollection? contentImages)
         {
+            var idempotencyKey = Request.Headers["Idempotency-Key"].FirstOrDefault();
+
             var result = await Mediator.Send(new CreateContent.Command
             {
                 ContentDto = contentDto,
-                ContentImages = contentImages
+                ContentImages = contentImages,
+                IdempotencyKey = idempotencyKey
+
             });
             return HandleResult(result);
         }
