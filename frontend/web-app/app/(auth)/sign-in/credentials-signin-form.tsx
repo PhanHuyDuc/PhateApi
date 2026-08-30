@@ -22,6 +22,7 @@ export default function CredentialsSigninForm() {
   // Redirect on successful sign-in
   useEffect(() => {
     if (data.success) {
+      router.refresh();
       router.push(callbackUrl);
     }
   }, [data.success, router, callbackUrl]);

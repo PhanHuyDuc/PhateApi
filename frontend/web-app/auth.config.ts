@@ -23,9 +23,9 @@ export const authConfig = {
           currentUser && Array.isArray((currentUser as any).roles)
             ? (currentUser as any).roles
             : [];
-
+        
         const adminAccess = userRoles.toLocaleString();
-
+        
         if (adminAccess == "Member") {
           return NextResponse.redirect(new URL("/unauthorized", request.url));
         }

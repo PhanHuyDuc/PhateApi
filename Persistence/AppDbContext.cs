@@ -35,6 +35,11 @@ namespace Persistence
                     new IdentityRole { Id = "a587563a-444d-4c6d-b539-a00d0c410b58", Name = "Manager", NormalizedName = "MANAGER" },
                     new IdentityRole { Id = "ed2e9149-fa53-484c-a93f-bd33f9e9fcf6", Name = "Admin", NormalizedName = "ADMIN" }
            );
+
+            builder.Entity<Content>()
+                .HasIndex(c => c.IdempotencyKey)
+                .IsUnique()
+                .HasFilter("[IdempotencyKey] IS NOT NULL");
         }
     }
 
