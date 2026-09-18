@@ -59,7 +59,7 @@ export default function ContentForm({ content }: Props) {
   useEffect(() => {
     const fetchArtists = async () => {
       try {
-        const res = await getArtist("?pageSize=50");
+        const res = await getArtist("?pageSize=1000");
         const data = Array.isArray(res) ? res : res.results ?? [];
 
         const artistOptions = data.map((a: any) => ({
@@ -160,6 +160,7 @@ export default function ContentForm({ content }: Props) {
           <SelectForm
             label="Artist"
             placeholder="--Select Artist--"
+            searchable
             name="artist"
             control={control}
             showlabel={true}
