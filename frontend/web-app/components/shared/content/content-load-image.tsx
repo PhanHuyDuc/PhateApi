@@ -78,7 +78,7 @@ export default function ContentLoadImage({ images }: { images: ImageProps[] }) {
           <div 
             key={img.id} 
             id={`grid-image-${i}`} 
-            className="w-full max-w-3xl cursor-pointer transition-transform hover:scale-[1.01]" 
+            className="w-full cursor-pointer transition-transform hover:scale-[1.01]" 
             onClick={() => {
               setCurrentIndex(i);
               setLightboxOpen(true);
@@ -87,8 +87,8 @@ export default function ContentLoadImage({ images }: { images: ImageProps[] }) {
             <ImageLoader
               src={img.url}
               alt={img.order?.toString() || "Content image"}
-              height={720}
-              width={1080}
+              height={1880}
+              width={1280}
             />
           </div>
         ))}
